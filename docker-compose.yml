@@ -2,7 +2,6 @@ version: "2"
 services:
   ui:
     build: ./client/blogui
-    
     ports:
     - "3000:3000"
     depends_on:
@@ -10,16 +9,37 @@ services:
     stdin_open: true
     
   server:
-    
     build: ./server
     ports:
     - "5000:5000"
     depends_on:
     - mongo
+    - redis
+    - neo4j
+
   mongo:
     image: mongo
+    volumes: 
+      - "./data:/data"
     ports:
     - "27017:27017"
+
+  redis:
+    image: redis
+    volumes: 
+      - "./data:/data"
+    ports:
+    - "6379:6379"
+  
+  neo4j:
+    image: neo4j
+    volumes: 
+      - "./data:/data"
+      - "./log/log"
+    ports:
+    - "7474:7474"
+    - "7473:7473"
+    - "7687:7687"
 
 
 
