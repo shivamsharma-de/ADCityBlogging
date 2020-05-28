@@ -1,0 +1,4 @@
+Add your Databases credentials here.
+DB_URI = YOUR_DB_URI
+DB_USER = username
+DB_PWD = password

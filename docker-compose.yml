@@ -1,0 +1,26 @@
+version: "2"
+services:
+  ui:
+    build: ./client/blogui
+    
+    ports:
+    - "3000:3000"
+    depends_on:
+    - server
+    stdin_open: true
+    
+  server:
+    
+    build: ./server
+    ports:
+    - "5000:5000"
+    depends_on:
+    - mongo
+  mongo:
+    image: mongo
+    ports:
+    - "27017:27017"
+
+
+
+    
