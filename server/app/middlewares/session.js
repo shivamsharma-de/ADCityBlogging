@@ -4,7 +4,7 @@
  const redisStore = connectRedis(session);
 
  module.exports = session({
-    name: "sid",
+    name: "sessionId",
     store: new redisStore({ client: redisClient }),
     secret: "9~[Z/kk%s~5AK~Dx",
     resave: false,
@@ -16,3 +16,6 @@
         httpOnly: true,
     },
 }) 
+
+
+ 
