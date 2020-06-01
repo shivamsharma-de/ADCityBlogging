@@ -5,12 +5,13 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const dbConfig = require("./app/config/db.config");
-// const multer = require('multer');
+var cookieParser = require('cookie-parser');
 const mongoose = require("mongoose");
 // require('dotenv').config();
 
 //REDIS SETUP
 const session = require("./app/middlewares/session");
+app.use(cookieParser());
 app.use(session);
 
 
