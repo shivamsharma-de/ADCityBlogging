@@ -1,4 +1,5 @@
 // const express = require('express');
+const { verifySignUp } = require("../middlewares");
 // const router = new express.Router;
 // const User = require('../controllers/user.controller');
 // const Post = require('../controllers/post.controller');
@@ -21,7 +22,7 @@ module.exports = function(app) {
  * 
  */
    
-    app.get("/api/test/posts", controller.getPost);
+    app.get("/api/test/posts", verifySignUp.isLoggedin, controller.getPost);
 
 /**
  * @swagger

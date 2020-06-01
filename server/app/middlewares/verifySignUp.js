@@ -1,5 +1,7 @@
-const db = require("../models");
+  const db = require("../models");
 const ROLES = db.ROLES;
+const redisClient = require("../config/redis.config"); 
+
 const User = db.user;
 
 checkDuplicateUsernameOrEmail = (req, res, next) => {
@@ -51,11 +53,27 @@ checkRolesExisted = (req, res, next) => {
   next();
 };
 
+isLoggedin = (req, res, next) => {
 
+  const Id  = req.sessionID
+  console.log(Id)
+   
+  redisClient.get(Id, (err, data) => {
+      if (err) {
+          console.log(err)
+          res.status(500).send(err);
+      }
+      if (data ==! null) {
+          res.send(data);
+      } else next();
+  });
+  console.log("inside isloggedin")
+}
 
 const verifySignUp = {
   checkDuplicateUsernameOrEmail,
-  checkRolesExisted
+  checkRolesExisted, isLoggedin
+
 };
 
 module.exports = verifySignUp;

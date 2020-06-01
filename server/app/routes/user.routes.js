@@ -5,7 +5,8 @@ module.exports = function(app) {
   app.use(function(req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
-      "x-access-token, Origin, Content-Type, Accept"
+     // "x-access-token, Origin, Content-Type, Accept"
+     " Origin, Content-Type, Accept"
     );
     next();
   });
@@ -16,22 +17,22 @@ module.exports = function(app) {
   app.get("/api/test/specificuserposts/:id", controller.postsByUser);
   app.put("/api/test/profileupdate/:id", controller.profileupdate);
 
-  app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);
+  app.get("/api/test/user", [authJwt.authenticate], controller.userBoard);
 
   app.get(
     "/api/test/mod",
-    [authJwt.verifyToken, authJwt.isModerator],
+    [authJwt.authenticate, authJwt.isModerator],
     controller.moderatorBoard
   );
 
   app.get(
     "/api/test/admin",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.authenticate, authJwt.isAdmin],
     controller.adminBoard
   );
   app.get(
     "/api/test/admin/users",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.authenticate, authJwt.isAdmin],
     controller.adminBoard
   );
 };
