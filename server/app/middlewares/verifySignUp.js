@@ -57,7 +57,7 @@ checkRolesExisted = (req, res, next) => {
   next();
 };
 
- isLoggedin = (req, res) => {
+ isLoggedin = (req, res,next) => {
   const w = req.cookies.sessionId
   var i  = String(w)
   var a = i.substring(2, i.len);
@@ -67,13 +67,13 @@ checkRolesExisted = (req, res, next) => {
    redisClient.get(sessionid, (err, reply) => {
       if(err){
         console.log("Kindly log in")
-        res.status(400).send(err)
+        res.send(err)
       }
       if (reply == null) {
 
-        res.status(500).send("kindly login to see posts");
+        res.send("kindly login to see posts");
       }  
-        
+        next();
      
   });
 
