@@ -74,6 +74,7 @@ checkRolesExisted = (req, res, next) => {
         res.send("kindly login to see posts");
       }  
         next();
+        // still not working 
      
   });
 
