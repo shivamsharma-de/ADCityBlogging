@@ -13,7 +13,7 @@ const paginate = require('jw-paginate');
 
     exports.getPost =  async (req,res) =>{
         const posta =  await Post.find().sort({date: -1});
-       
+        
         const page = parseInt(req.query.page) || 1
         const pageSize = 5;
         const pager = paginate(posta.length, page, pageSize);
