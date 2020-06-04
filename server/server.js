@@ -46,7 +46,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 // parse requests of content-type - application/json
 app.use(bodyParser.json({ limit: "50mb" }));
 
-// app.use('/uploads', express.static('uploads'));
+
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
@@ -70,22 +70,20 @@ db.mongoose
 		process.exit();
 	});
 
-// simple route
-app.get("/", (req, res) => {
-	res.json({ message: "Welcome to  application shashank." });
-});
+
 
 // routes
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/post.routes")(app);
-
+require("./app/config/neo4j.coinfig");
+// const driver = require("./app/config/neo4j.coinfig");
 // set port, listen for requests
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}.`);
 });
-const neosession = require("./app/config/neo4j.coinfig");
+
 function initial() {
 	Role.estimatedDocumentCount((err, count) => {
 		if (!err && count === 0) {
@@ -122,3 +120,4 @@ function initial() {
 	});
 
 }
+
