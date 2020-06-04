@@ -5,8 +5,10 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const dbConfig = require("./app/config/db.config");
+
 var cookieParser = require('cookie-parser');
 const mongoose = require("mongoose");
+
 // require('dotenv').config();
 
 //REDIS SETUP
@@ -83,7 +85,7 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}.`);
 });
-
+const neosession = require("./app/config/neo4j.coinfig");
 function initial() {
 	Role.estimatedDocumentCount((err, count) => {
 		if (!err && count === 0) {
@@ -118,4 +120,5 @@ function initial() {
 			});
 		}
 	});
+
 }
