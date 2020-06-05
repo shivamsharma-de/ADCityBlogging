@@ -35,5 +35,6 @@ module.exports = function(app) {
     [authJwt.authenticate, authJwt.isAdmin],
     controller.adminBoard
   );
+  app.post("/api/test/follow/:id", controller.follow );
 };
 

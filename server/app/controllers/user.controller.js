@@ -1,4 +1,5 @@
 const User = require("../models/user.model");
+const driver = require("../config/neo4j.coinfig");
 
 const paginate = require('jw-paginate');
 
@@ -21,6 +22,31 @@ exports.specificUser = async (req, res) => {
     website: specificUser.website,
   });
 };
+exports.follow = async (req, res) =>{
+  const session = driver.session();
+  const u  = req.params;
+  const id1 = u.id
+  const id2  = req.body.id;
+  const user1 =  await User.findById(id1);
+  const user2 = await User.findById(id2);
+  const username1 = user1.username
+  const username2 = user2.username
+  session
+  .run(
+    "MATCH (a:Person), (b:Person) WHERE a.name = $username1 AND b.name =  $username2 CREATE (a)-[: Follows {created_at: TIMESTAMP()}]->(b) ",
+    {
+      username1: username1,
+      username2: username2,
+    }
+  )
+  .then(() => {
+
+    session.close(() => {
+      console.log(` Followed`);
+    });
+  });
+res.status(200).send(`$username1 followed $username2`)
+}
 exports.postsByUser = async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id).populate("posts");
