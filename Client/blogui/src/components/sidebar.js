@@ -27,26 +27,38 @@ class Sidebar extends Component{
 
     
     return (
-        <div style={{ marginTop: "50px" }}>
-        <div className="card my-4 " >
+        <div>
+        <div className="card" >
         <h5 className="card-header">Search Post</h5>
         <div className="card-body">
           <div className="input-group">
             <input type="text" className="form-control" placeholder="write any keyword for to look in " onChange={this.onChangeInputSearch} value = {this.state.query}/>
             <span className="input-group-btn">
       
-            <Link to ={`/search/?q=${this.state.query}`}>
-              <button className="btn btn-secondary" type="button">Go!</button>
+            {/* <Link to ={`/search/?q=${this.state.query}`}>
+              <button className="btn btn-secondary" type="button">Search Post</button>
               </Link>
+              <Link to ={`/search/?q=${this.state.query}`}>
+              <button className="btn btn-secondary" type="button">Search User</button>
+              </Link> */}
             </span>
+           
           </div>
+          <div className="d-flex justify-content-around py-3">
+             <Link to ={`/search/?q=${this.state.query}`}>
+              <button className="btn btn-secondary" type="button">Search in Posts</button>
+              </Link>
+              <Link to ={`/search`}>
+              <button className="btn btn-secondary" type="button">Search in Users</button>
+              </Link>
+            </div>
         </div>
       </div>
 
    
       <div className="card my-4">
         <h5 className="card-header">Useful Links</h5>
-        <div className="card-body">
+        <div className="card-body"> 
           <div className="row">
             <div className="col-lg-6">
               <ul className="list-unstyled mb-0">

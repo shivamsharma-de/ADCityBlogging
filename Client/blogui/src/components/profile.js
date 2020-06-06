@@ -9,6 +9,11 @@ import Footer from "./Footer";
 import Sidebar from "./sidebar";
 import Profileupdate from "../services/profileupdate"
 
+const styleFooter = {
+  position: "absolute",
+  width: "100%"
+}
+
 const required = value => {
   if (!value) {
     return (
@@ -135,12 +140,12 @@ export default class Profile extends Component {
       </div>
      
         
-        <div className="container">
+        <div className="container mrgn">
           <div className="row">
           {currentUser ? (
-            <div className="col-lg-8">
+            <div className="col-lg-10">
           
-            <div className="card" style={{ padding:"5%",margin:"10%"}}>
+            <div className="card">
             <Form onSubmit={this.handleUpdate}
             ref={c => {
               this.form = c;
@@ -291,7 +296,7 @@ export default class Profile extends Component {
 
         </div>
   
-        <div>
+        <div style={styleFooter}>
           <Footer />
         </div>
       </div>
