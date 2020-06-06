@@ -6,6 +6,14 @@ import Sidebar from "./sidebar";
 import Header from "./Header";
 import Footer from "./Footer";
 import './card.css'
+
+
+const styleFooter = {
+  position: 'absolute',
+  width: "100%"
+}
+
+
 export class Searchpage extends Component {
     constructor(props) {
         super(props)
@@ -42,10 +50,10 @@ export class Searchpage extends Component {
             <Header/>
             </div>
 
-            <div className="container">
+            <div className="container mrgn">
               <div className="row">
             <div className="col-lg-8" >
-            <div  style={{ margin: "50px" }}><h2>You searched for "{query.q}"</h2></div>
+            <div><h2>You searched for "{query.q}"</h2></div>
             {posts.map((post) => (
   
               <div key={post._id} className="col-lg-10">
@@ -80,8 +88,8 @@ export class Searchpage extends Component {
             </div>
          
             </div>
+            <div style={styleFooter}><Footer /></div>
             
-            <Footer />
             </div>
         )
     }

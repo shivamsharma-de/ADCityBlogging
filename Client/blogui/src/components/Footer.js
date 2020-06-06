@@ -13,7 +13,7 @@ const FooterPage = () => {
         <div className="row">
         	<div className="col-md-6 footer-brand animated fadeInLeft">
             	<h2>MIA</h2>
-                <p>Mannheim Indian Association.</p>
+                <p>Maintained by mannheim Indian Association.</p>
                 <p>© 2020 MIA, All rights reserved</p>
             </div>
         	<div className="col-md-6 footer-social animated fadeInDown">

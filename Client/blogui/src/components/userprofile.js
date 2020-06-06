@@ -4,6 +4,14 @@ import Footer from "./Footer";
 import Moment from "react-moment";
 import Sidebar from "./sidebar";
 import {Link }from 'react-router-dom'
+
+
+const styleFooter = {
+  position: 'absolute',
+  width: "100%"
+}
+
+
 export class Userprofile extends Component {
   constructor(props) {
     super(props);
@@ -44,7 +52,7 @@ export class Userprofile extends Component {
         <Header/>
         </div>
 
-        <div class="container">
+        <div class="container mrgn">
           <div class="row">
             <div class="col-lg-8">
             <div className= "card card-body" style={{padding: "10%", margin:"10px"}}>
@@ -106,8 +114,9 @@ export class Userprofile extends Component {
             </div>
           </div>
         </div>
-
+              <div style={styleFooter}>
         <Footer />
+        </div>
       </div>
     );
   }

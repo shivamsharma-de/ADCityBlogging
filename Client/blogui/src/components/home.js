@@ -4,6 +4,13 @@ import Footer from "./Footer";
 import "./home.css";
 
 import { Link } from "react-router-dom";
+
+const styleFooter = {
+  margin: "0 auto",
+  position: "absolute",
+  width: "100%"
+};
+
 export class Home extends Component {
   render() {
     return (
@@ -72,13 +79,13 @@ export class Home extends Component {
             <div className="carousel-item">
               <img
                 className="third-slide"
-                src={require("./bridge.jpg")}
+                src={require("./scene.png")}
                 alt="Third slide"
               />
               <div className="container">
                 <div className="carousel-caption text-right">
-                  <h1 className="text-danger">Updates and stories </h1>
-                  <p className="text-danger">
+                  <h1 className="text-white">Updates and stories </h1>
+                  <p className="text-white">
                     All the updates and stories you will get it over here by our
                     members.
                   </p>
@@ -115,7 +122,7 @@ export class Home extends Component {
           </a>
         </div>
 
-        <div>
+        <div style={styleFooter}>
           <Footer />
         </div>
       </div>

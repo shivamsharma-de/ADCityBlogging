@@ -8,6 +8,11 @@ import {
 
 import AuthService from "../services/auth.service";
 
+const logoFont = {
+  fontFamily: "'Pacifico', cursive",
+  letterSpacing: "2px"
+}
+
 class Header extends Component {
   constructor(props) {
     super(props);
@@ -53,7 +58,7 @@ class Header extends Component {
           </button>
           <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
             <Link className="navbar-brand font-weight-bold" to="/">
-              MIA
+             <span className="h4" style={logoFont}>City blogging</span>
             </Link>
       
             
