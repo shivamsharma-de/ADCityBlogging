@@ -27,6 +27,7 @@
     "jsonwebtoken": "^8.5.1",
     "jw-paginate": "^1.0.4",
     "mongoose": "^5.9.1",
+    "neo4j-driver": "^4.0.2",
     "nodemon": "^2.0.3",
     "redis": "^3.0.2",
     "request": "^2.88.2",
