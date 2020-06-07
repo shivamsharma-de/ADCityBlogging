@@ -29,44 +29,45 @@ exports.submitPost = async (req, res) => {
   id = user.id;
   const { title, content, category } = req.body;
   const userById = await User.findById(id);
-  author = userById.username;
-  const username = author;
-  const writeTxPromise = session.writeTransaction((tx) =>
-    tx.run(
-      "MATCH ( a:Person { name: $username }) MERGE ( b: Post {name: $title, likes: 0, author: $username, comment: 0}) MERGE (a)-[: Wrote {created_at: TIMESTAMP()}]->(b)",
-      { username: username, title: title }
-    )
-  );
-  writeTxPromise.then(() => {
-    console.log("in the write");
-    const write1TxPromise = session.writeTransaction((tx) =>
-      tx.run(
-        " MATCH (a:Post {name: $title}),(b:Category{name : $category}) CREATE (a)-[: Belongs_to ]->(b)",
-        {
-          title: title,
-          category: category,
-        }
-      )
-    );
-
-    write1TxPromise.then((result) => {
-      session.close();
-      console.log("Matched created node with id: ");
-    });
-  });
+  const username = userById.username;
+ 
   const post = await Post({
     title: title,
     content: content,
     user: id,
-    author: author,
+    author: username,
   });
 
   await post.save();
 
   userById.posts.push(post);
   await userById.save();
+  const id1 = post.id
+  const writeTxPromise =  session.writeTransaction((tx) =>
+  tx.run(
+    "MATCH ( a:Person { name: $username }) MERGE ( b: Post { name:$title, likes: 0, idm: $id1, comment: 0}) MERGE (a)-[: Wrote {created_at: TIMESTAMP()}]->(b)",
+    { username:username, id1: id1, title:title }
+  )
+);
+ writeTxPromise.then(() => {
+  console.log("in the write");
+  const write1TxPromise =  session.writeTransaction((tx) =>
+    tx.run(
+      " MATCH (a:Post {_id: $id1}),(b:Category{name : $category}) CREATE (a)-[: Belongs_to ]->(b)",
+      {
+        id1: id1,
+        category: category,
+      }
+    )
+  );
 
-  return res.status(200).send(userById);
+  write1TxPromise.then(() => {
+    session.close();
+    console.log("Matched created node with id ");
+  });
+});
+
+  return res.status(200).send("added");
 };
 exports.specificPost = async (req, res) => {
   post = req.params;
@@ -96,3 +97,14 @@ exports.searchpost = async (req, res) => {
   });
   res.send(searchpost);
 };
+exports.commentpost = async (req, res) => {
+    search = req.params.query;
+    const searchpost = await Post.find({
+      $or: [
+        { title: { $regex: search, $options: "i" } },
+        { content: { $regex: search, $options: "i" } },
+        { author: { $regex: search, $options: "i" } },
+      ],
+    });
+    res.send(searchpost);
+  };
