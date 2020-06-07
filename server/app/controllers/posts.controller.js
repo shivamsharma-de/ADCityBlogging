@@ -53,7 +53,7 @@ exports.submitPost = async (req, res) => {
   console.log("in the write");
   const write1TxPromise =  session.writeTransaction((tx) =>
     tx.run(
-      " MATCH (a:Post {_id: $id1}),(b:Category{name : $category}) CREATE (a)-[: Belongs_to ]->(b)",
+      " MATCH (a:Post {idm: $id1}),(b:Category{name : $category}) CREATE (a)-[: Belongs_to ]->(b)",
       {
         id1: id1,
         category: category,
@@ -97,14 +97,23 @@ exports.searchpost = async (req, res) => {
   });
   res.send(searchpost);
 };
-exports.commentpost = async (req, res) => {
-    search = req.params.query;
-    const searchpost = await Post.find({
-      $or: [
-        { title: { $regex: search, $options: "i" } },
-        { content: { $regex: search, $options: "i" } },
-        { author: { $regex: search, $options: "i" } },
-      ],
-    });
-    res.send(searchpost);
+exports.createcomment = async (req, res) => {
+   
+    const session = driver.session();
+    const userid = req.body.userid;
+    const postid = req.body.postid;
+    const comment = req.body.comment;
+
+    await session
+      .run(" MATCH (a:Person {idm: $userid}) MATCH (b:Post {idm: $postid}) MERGE (a)-[: Did_activity_on {commented_on: TIMESTAMP(), comment: $comment}]->(b) ",{
+        userid: userid,
+        postid: postid,
+        comment: comment
+      })
+      .then(() => {
+        session.close(() => {
+          console.log(` addded in comment`);
+        });
+      });
+    res.send("Addedcomment");
   };

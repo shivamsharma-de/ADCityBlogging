@@ -120,5 +120,9 @@ module.exports = function(app) {
         "/api/find/:query", controller.searchpost
   
       );
+      app.post(
+        "/api/test/comment", controller.createcomment
+  
+      );
 
   };
