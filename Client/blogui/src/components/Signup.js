@@ -72,6 +72,7 @@ class Signup extends Component {
 		this.onChangeUsername = this.onChangeUsername.bind(this);
 		this.onChangeEmail = this.onChangeEmail.bind(this);
 		this.onChangePassword = this.onChangePassword.bind(this);
+		this.onChangeCgt = this.onChangeCgt.bind(this);
 
 		this.state = {
 			firstname: "",
@@ -82,6 +83,7 @@ class Signup extends Component {
 			password: "",
 			successful: false,
 			message: "",
+			cgt: [],
 		};
 	}
 
@@ -117,6 +119,20 @@ class Signup extends Component {
 			password: e.target.value,
 		});
 	}
+	onChangeCgt = (e) => {
+			let selectedCategories = e.target.name;
+			let tempArr = this.state.cgt;
+			if (tempArr.includes(selectedCategories)) {
+				let indexOfCgt = tempArr.findIndex((elem) => elem === selectedCategories);
+				tempArr.splice(indexOfCgt, 1);
+			} else {
+				tempArr.push(selectedCategories);
+			}
+			this.setState({
+				cgt: tempArr,
+			});
+			console.log(this.state.cgt)
+	}
 
 	handleRegister(e) {
 		e.preventDefault();
@@ -135,7 +151,8 @@ class Signup extends Component {
 				this.state.gender,
 				this.state.username,
 				this.state.email,
-				this.state.password
+				this.state.password,
+				this.state.cgt
 			).then(
 				(response) => {
 					this.setState({
@@ -278,6 +295,7 @@ class Signup extends Component {
 												/>
 											</div>
 										</div>
+
 										<div className='form-group row pt-3'>
 											<label
 												className='col-md-2 col-form-label'
@@ -291,7 +309,8 @@ class Signup extends Component {
 														class='form-check-input'
 														type='checkbox'
 														id='inlineCheckbox1'
-														value='option1'
+														name='Flights'
+														onChange={this.onChangeCgt}
 													/>
 													<label class='form-check-label' for='inlineCheckbox1'>
 														Flights
@@ -302,7 +321,8 @@ class Signup extends Component {
 														class='form-check-input'
 														type='checkbox'
 														id='inlineCheckbox2'
-														value='option2'
+														name='Universities'
+														onChange={this.onChangeCgt}
 													/>
 													<label class='form-check-label' for='inlineCheckbox2'>
 														Universities
@@ -313,7 +333,8 @@ class Signup extends Component {
 														class='form-check-input'
 														type='checkbox'
 														id='inlineCheckbox2'
-														value='option2'
+														name='Visas'
+														onChange={this.onChangeCgt}
 													/>
 													<label class='form-check-label' for='inlineCheckbox2'>
 														Visas
@@ -324,7 +345,8 @@ class Signup extends Component {
 														class='form-check-input'
 														type='checkbox'
 														id='inlineCheckbox2'
-														value='option2'
+														name='Accomodation'
+														onChange={this.onChangeCgt}
 													/>
 													<label class='form-check-label' for='inlineCheckbox2'>
 														Accomodation
@@ -335,7 +357,8 @@ class Signup extends Component {
 														class='form-check-input'
 														type='checkbox'
 														id='inlineCheckbox2'
-														value='option2'
+														name='City_Office'
+														onChange={this.onChangeCgt}
 													/>
 													<label class='form-check-label' for='inlineCheckbox2'>
 														CityOffice

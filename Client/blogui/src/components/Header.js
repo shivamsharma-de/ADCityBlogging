@@ -10,7 +10,7 @@ import AuthService from "../services/auth.service";
 
 const logoFont = {
   fontFamily: "'Pacifico', cursive",
-  letterSpacing: "2px"
+  letterSpacing: "1px"
 }
 
 class Header extends Component {
