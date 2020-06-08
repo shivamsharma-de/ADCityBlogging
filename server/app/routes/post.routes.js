@@ -124,5 +124,8 @@ module.exports = function(app) {
         "/api/test/comment", controller.createcomment
   
       );
-
+      app.post(
+        "/api/test/getcomments", controller.getcomments
+  
+      );
   };

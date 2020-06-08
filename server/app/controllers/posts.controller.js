@@ -30,7 +30,7 @@ exports.submitPost = async (req, res) => {
   const { title, content, category } = req.body;
   const userById = await User.findById(id);
   const username = userById.username;
- 
+
   const post = await Post({
     title: title,
     content: content,
@@ -42,30 +42,30 @@ exports.submitPost = async (req, res) => {
 
   userById.posts.push(post);
   await userById.save();
-  const id1 = post.id
-  const writeTxPromise =  session.writeTransaction((tx) =>
-  tx.run(
-    "MATCH ( a:Person { name: $username }) MERGE ( b: Post { name:$title, likes: 0, idm: $id1, comment: 0}) MERGE (a)-[: Wrote {created_at: TIMESTAMP()}]->(b)",
-    { username:username, id1: id1, title:title }
-  )
-);
- writeTxPromise.then(() => {
-  console.log("in the write");
-  const write1TxPromise =  session.writeTransaction((tx) =>
+  const id1 = post.id;
+  const writeTxPromise = session.writeTransaction((tx) =>
     tx.run(
-      " MATCH (a:Post {idm: $id1}),(b:Category{name : $category}) CREATE (a)-[: Belongs_to ]->(b)",
-      {
-        id1: id1,
-        category: category,
-      }
+      "MATCH ( a:Person { name: $username }) MERGE ( b: Post { name:$title, likes: 0, idm: $id1, comment: 0}) MERGE (a)-[: Wrote {created_at: TIMESTAMP()}]->(b)",
+      { username: username, id1: id1, title: title }
     )
   );
+  writeTxPromise.then(() => {
+    console.log("in the write");
+    const write1TxPromise = session.writeTransaction((tx) =>
+      tx.run(
+        " MATCH (a:Post {idm: $id1}),(b:Category{name : $category}) CREATE (a)-[: Belongs_to ]->(b)",
+        {
+          id1: id1,
+          category: category,
+        }
+      )
+    );
 
-  write1TxPromise.then(() => {
-    session.close();
-    console.log("Matched created node with id ");
+    write1TxPromise.then(() => {
+      session.close();
+      console.log("Matched created node with id ");
+    });
   });
-});
 
   return res.status(200).send("added");
 };
@@ -98,22 +98,51 @@ exports.searchpost = async (req, res) => {
   res.send(searchpost);
 };
 exports.createcomment = async (req, res) => {
-   
-    const session = driver.session();
-    const userid = req.body.userid;
-    const postid = req.body.postid;
-    const comment = req.body.comment;
+  const session = driver.session();
+  const userid = req.body.userid;
+  const postid = req.body.postid;
+  const comment = req.body.comment;
 
-    await session
-      .run(" MATCH (a:Person {idm: $userid}) MATCH (b:Post {idm: $postid}) MERGE (a)-[: Did_activity_on {commented_on: TIMESTAMP(), comment: $comment}]->(b) ",{
+  await session
+    .run(
+      " MATCH (a:Person {idm: $userid}) MATCH (b:Post {idm: $postid}) MERGE (a)-[: Did_activity_on {commented_on: TIMESTAMP(), comment: $comment}]->(b) ",
+      {
         userid: userid,
         postid: postid,
-        comment: comment
-      })
-      .then(() => {
-        session.close(() => {
-          console.log(` addded in comment`);
-        });
+        comment: comment,
+      }
+    )
+    .then(() => {
+      session.close(() => {
+        console.log(` addded in comment`);
       });
-    res.send("Addedcomment");
-  };
+    });
+  res.send("Addedcomment");
+};
+exports.getcomments = async (req, res) => {
+  const session = driver.session();
+  const postid = req.body.postid;
+
+  await session
+    .run(
+      " MATCH (x:Post) <-[r:Did_activity_on]- (p:Person) WHERE x.idm=$postid RETURN r.comment AS comment , p.idm AS userid",
+      {
+        postid: postid })
+        .then(result => {
+            const commentarray =[];
+            result.records.forEach(record => {
+                commentarray.push({
+                    comment: record._fields[0],
+                    userid: record._fields[1]
+                })
+           
+            })
+            res.send(commentarray)
+          })
+         
+          .catch(error => {
+            console.log(error)
+          })
+          .then(() => session.close())
+    
+};
