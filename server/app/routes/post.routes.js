@@ -128,4 +128,8 @@ module.exports = function(app) {
         "/api/test/getcomments", controller.getcomments
   
       );
+      app.post(
+        "/api/test/likepost", controller.likepost
+  
+      );
   };

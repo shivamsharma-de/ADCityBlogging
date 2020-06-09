@@ -98,27 +98,46 @@ exports.searchpost = async (req, res) => {
   res.send(searchpost);
 };
 exports.createcomment = async (req, res) => {
-  const session = driver.session();
-  const userid = req.body.userid;
-  const postid = req.body.postid;
+  const session2 = driver.session();
+  const uid = req.body.uid;
+  const pid = req.body.pid;
   const comment = req.body.comment;
 
-  await session
+  await session2
     .run(
-      " MATCH (a:Person {idm: $userid}) MATCH (b:Post {idm: $postid}) MERGE (a)-[: Did_activity_on {commented_on: TIMESTAMP(), comment: $comment}]->(b) ",
+      " MATCH (a:Person {idm: $uid}) MATCH (b:Post {idm: $pid}) MERGE (a)-[: Did_activity_on {commented_on: TIMESTAMP(), comment: $comment}]->(b) ",
       {
-        userid: userid,
-        postid: postid,
+        uid: uid,
+        pid: pid,
         comment: comment,
       }
     )
     .then(() => {
-      session.close(() => {
-        console.log(` addded in comment`);
-      });
+      session2.close();
     });
   res.send("Addedcomment");
 };
+exports.likepost = async (req, res) => {
+    const session = driver.session();
+    const userid = req.body.userid;
+    const postid = req.body.postid;
+  
+    await session
+      .run(
+        "MATCH (a:Person {idm: $userid}) MATCH (b:Post {idm: $postid}) MERGE (a)-[: Did_activity_on {liked_on: TIMESTAMP(), like: true}]->(b) ",
+        {
+          userid: userid,
+          postid: postid,
+         
+        }
+      )
+      .then(() => {
+        session.close(() => {
+          console.log(` addded in comment`);
+        });
+      });
+    res.send("Addedcomment");
+  };
 exports.getcomments = async (req, res) => {
   const session = driver.session();
   const postid = req.body.postid;
@@ -135,8 +154,8 @@ exports.getcomments = async (req, res) => {
                     comment: record._fields[0],
                     userid: record._fields[1]
                 })
-           
             })
+
             res.send(commentarray)
           })
          

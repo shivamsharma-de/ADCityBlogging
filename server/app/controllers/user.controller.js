@@ -26,14 +26,17 @@ exports.follow = async (req, res) =>{
   const session = driver.session();
   const u  = req.params;
   const id1 = u.id
-  const id2  = req.body.id;
+  const id2  = req.body.id2;
+  
   const user1 =  await User.findById(id1);
-  const user2 = await User.findById(id2);
-  const username1 = user1.username
-  const username2 = user2.username
+  const user2 =  await User.findById(id2);
+  const username1 = user1.username;
+  
+  const username2 =  user2.username;
+
   session
   .run(
-    "MATCH (a:Person), (b:Person) WHERE a.name = $username1 AND b.name =  $username2 CREATE (a)-[: Follows {created_at: TIMESTAMP()}]->(b) ",
+    "MATCH (a:Person), (b:Person) WHERE a.name = $username1 AND b.name =  $username2 MERGE (a)-[: Follows {created_at: TIMESTAMP()}]->(b) ",
     {
       username1: username1,
       username2: username2,
