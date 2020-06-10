@@ -120,5 +120,16 @@ module.exports = function(app) {
         "/api/find/:query", controller.searchpost
   
       );
-
+      app.post(
+        "/api/test/comment", controller.createcomment
+  
+      );
+      app.post(
+        "/api/test/getcomments", controller.getcomments
+  
+      );
+      app.post(
+        "/api/test/likepost", controller.likepost
+  
+      );
   };
