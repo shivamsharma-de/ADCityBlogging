@@ -3,9 +3,16 @@ import { Link } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 import Moment from "react-moment";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faThumbsUp, faThumbsDown, faComments} from '@fortawesome/free-solid-svg-icons'
 
 import Sidebar from "./sidebar";
 import './card.css'
+
+const styleFooter = {
+  position: "absolute",
+  width: "100%"
+};
 
 class Posts extends React.Component {
   constructor(props) {
@@ -16,6 +23,8 @@ class Posts extends React.Component {
       pageOfItems: [],
     };
   }
+
+
 
   componentDidMount() {
     this.loadPage();
@@ -48,10 +57,10 @@ class Posts extends React.Component {
       <div className="fixed-top">
       <Header/>
       </div>
-       <div className = "container">
+       <div className = "container mrgn">
           <div className="row">
             <div className="col-lg-8">
-             <div  style={{ margin: "50px" }}></div>
+             
               {pageOfItems.map((post) => (
                
                   <div key={post._id}
@@ -63,7 +72,7 @@ class Posts extends React.Component {
                       <Link to={`/singleposts/${post._id}`}>
                       <div className="card-header text-white bg-secondary">
                       
-                      <h5 className="card-title">{post.title}{" "}</h5>
+                      <h5 className="card-title">{post.title}</h5>
                         </div>
                       </Link>
    
@@ -71,16 +80,18 @@ class Posts extends React.Component {
                       <p className="card-text">{post.content}</p>
                   
                     </div>
-                    <div className="card-footer text-primary">
-                      
-                    <p>  <Moment fromNow>{post.date}</Moment></p>
+                    <div className="card-footer d-flex justify-content-between">
+                    <Link to ="/"><FontAwesomeIcon icon={faThumbsUp} color="red"/></Link>
+                    {/* <span><FontAwesomeIcon icon={faThumbsDown} color="red"/></span> */}
+                    <p className="text-success">  <Moment fromNow>{post.date}</Moment></p>
                     
-                      by -   <Link to={`/userprofile/${post.user}`}>
+                      <Link to={`/userprofile/${post.user}`}>
    
                     
-                        { post.author}
+                      <span className="ml-5">by - </span> { post.author}
                
                       </Link>
+                      <Link to ={`/userprofile/${post.user}`}><FontAwesomeIcon icon={faComments}/></Link>
                     </div>
                   </div>
                   </div>
@@ -158,7 +169,8 @@ class Posts extends React.Component {
             </ul>
           )}
         </div>
-        <Footer />
+        <div style={styleFooter}><Footer /></div>
+        
       </div>
     );
   }

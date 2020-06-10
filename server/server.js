@@ -3,7 +3,8 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const cors = require("cors");
+// const corsMiddleware = require('./app/middlewares/cors');
+//const cors = require("cors");
 const dbConfig = require("./app/config/db.config");
 
 var cookieParser = require('cookie-parser');
@@ -16,10 +17,13 @@ const session = require("./app/middlewares/session");
 app.use(cookieParser());
 app.use(session);
 
+//CORS logic
+// app.options('*', corsMiddleware);
+// app.use(corsMiddleware);
 
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
-app.use(cors());
+//app.use(cors());
 
 // swagger definition
 const swaggerOptions = {

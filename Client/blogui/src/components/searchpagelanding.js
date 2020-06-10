@@ -5,6 +5,8 @@ import Moment from "react-moment";
 import Sidebar from "./sidebar";
 import Header from "./Header";
 import Footer from "./Footer";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faThumbsUp, faThumbsDown, faComments} from '@fortawesome/free-solid-svg-icons'
 import './card.css'
 
 
@@ -65,19 +67,25 @@ export class Searchpage extends Component {
                       </div>
                     </Link>
                   
-                  <div className="card-body">
+                  <div className="card-body ">
                     <p className="card-text">{post.content}</p>
                     
                   </div>
-                  <div className="card-footer text-primary">
+                  <div className="card-footer d-flex justify-content-between">
+                    <Link to ="/"><FontAwesomeIcon icon={faThumbsUp} color="red"/></Link>
+                    {/* <span><FontAwesomeIcon icon={faThumbsDown} color="red"/></span> */}
+                    <p className="text-success">  <Moment format='Do MMMM YYYY - HH:mm'>
+													{post.date}
+												</Moment></p>
                     
-                    <p>  <Moment fromNow>{post.date}</Moment></p>
-                    by - <Link to={`/userprofile/${post.user}`}>
+                      <Link to={`/userprofile/${post.user}`}>
+   
                     
-                      { post.author}
-                    
-                    </Link>
-                  </div>
+                      <span className="ml-5">by - </span> { post.author}
+               
+                      </Link>
+                      <Link to ={`/userprofile/${post.user}`}><FontAwesomeIcon icon={faComments}/></Link>
+                    </div>
                </div>
              </div>
             ))}

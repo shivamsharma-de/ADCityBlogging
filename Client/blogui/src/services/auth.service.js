@@ -8,8 +8,9 @@ class AuthService {
       .post(API_URL + "signin", {
         username,
         password
-      })
+      }, )
       .then(response => {
+        console.log(response)
         if (response.data.accessToken) {
           localStorage.setItem("user", JSON.stringify(response.data));
         }
@@ -34,9 +35,9 @@ class AuthService {
     });
   }
 
-  getCurrentUser() {
-    return JSON.parse(localStorage.getItem('user'));;
-  }
+  // getCurrentUser() {
+  //   return JSON.parse(localStorage.getItem('user'));;
+  // }
 }
 
 export default new AuthService();

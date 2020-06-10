@@ -18,6 +18,10 @@ const required = value => {
     );
   }
 };
+const styleFooter = {
+  position: "absolute",
+  width: "100%"
+};
 
 export class SpecificPost extends Component {
   constructor(props) {
@@ -31,7 +35,7 @@ export class SpecificPost extends Component {
       post: {},
       title:"",
       content:"",
-      currentUser: AuthService.getCurrentUser(),
+      currentUser: "",//AuthService.getCurrentUser(),
       message:""
     };
   }
@@ -47,16 +51,16 @@ export class SpecificPost extends Component {
       content: e.target.value
     });
   }
-  componentDidMount() {
-    const user = AuthService.getCurrentUser();
-    this.loadPage();
-    if (user) {
-      this.setState({
-        currentUser: AuthService.getCurrentUser(),
+  // componentDidMount() {
+  //   const user = AuthService.getCurrentUser();
+  //   this.loadPage();
+  //   if (user) {
+  //     this.setState({
+  //       currentUser: AuthService.getCurrentUser(),
     
-      });
-    }
-  }
+  //     });
+  //   }
+  // }
 
   loadPage() {
     const id = this.props.match.params;
@@ -155,11 +159,11 @@ handledelete(e){
       <Header/>
       </div>
 
-        <div className="container">
+        <div className="container mrgn">
           <div className="row">
           {currentUser.username === post.author ? (
             <div class="col-lg-8">
-            <Form style={{marginTop:"50px"}} onSubmit={this.handleUpdate}
+            <Form onSubmit={this.handleUpdate}
             ref={c => {
               this.form = c;
             }}> 
@@ -271,7 +275,8 @@ handledelete(e){
             </div>
           </div>
         </div>
-        <Footer />
+        <div style={styleFooter}><Footer /></div>
+        
       </div>
     );
   }
