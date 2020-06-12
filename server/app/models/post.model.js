@@ -56,6 +56,11 @@ const PostSchema = mongoose.Schema({
       
   
     },
+    blocked_ids : [
+      {
+        type: mongoose.Schema.Types.ObjectId,ref:'User'
+      }
+  ],
     author :{
       type:String,
       
