@@ -1,13 +1,14 @@
 
 
 # Description - 
-I worked on a project MIA Blog which is a Blog post for the people who are new in the city of Mannheim or want to join the community to learn more about Indian culture. It is plain blogpost where user can signup and post the content they like. 
-I have used React for frontend, Express on NodeJS for backend and MongoDB as the database for this project.
+The City Blog is a social media application focusing on the particular geographical location i.e. a city. The application focuses on linking the community of a city together. This application is for the community of international students arriving in Deutschland for their education or job. This application focuses on solving their common issues which almost everyone faces and forms a community. This will help the university administrative staff to reduce the load. End-Users can Follow other Users, Create, Comment, and Like Posts and many other things that are present on the application. Another user would be an administrator who can upload some static information/ news and has the right to moderate the content of the post on the application and it has the power to remove and update the user status.
+
+For this project, we are using NodeJS for server, ReactJS for Client. MongoDB, Neo4j and Redis as our polyglot persistence.
 
 # Installation Steps - 
 Installation steps - 
 
-1. Download or clone the repository from - https://github.com/infomediadesign/sad-april-k-2372-1855-shivamsharma2503 
+1. Download or clone the repository from - 
 	
 2. Two strategies to run and up the project. 
 
@@ -137,4 +138,4 @@ For testing purposes users in the dummy data files are as follows -
     └── server.js			// node server.js (main file to enter into the API)
     ```
 
-youtube - https://www.youtube.com/watch?v=3LNODH_oicE
+
