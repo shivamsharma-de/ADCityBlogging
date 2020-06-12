@@ -5,6 +5,8 @@ The City Blog is a social media application focusing on the particular geographi
 
 For this project, we are using NodeJS for server, ReactJS for Client. MongoDB, Neo4j and Redis as our polyglot persistence.
 
+# Development is still going on so if you find any issues till last commit feel free to report them. 
+
 # Installation Steps - 
 Installation steps - 
 
