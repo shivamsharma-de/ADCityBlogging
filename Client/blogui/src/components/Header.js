@@ -23,17 +23,17 @@ class Header extends Component {
 		};
 	}
 
-	// componentDidMount() {
-	//   const user = AuthService.getCurrentUser();
+	componentDidMount() {
+	  const user = AuthService.getCurrentUser();
 
-	//   if (user) {
-	//     this.setState({
-	//       currentUser: AuthService.getCurrentUser(),
+	  if (user) {
+	    this.setState({
+	      currentUser: AuthService.getCurrentUser(),
 
-	//       showAdminBoard: user.roles.includes("ROLE_ADMIN"),
-	//     });
-	//   }
-	// }
+	      showAdminBoard: user.roles.includes("ROLE_ADMIN"),
+	    });
+	  }
+	}
 
 	logOut() {
 		AuthService.logout();
@@ -78,6 +78,15 @@ class Header extends Component {
 										</button>
 									</Link>
 								</li>
+								<li className='nav-item'>
+									<Link to={"/create-post"} className='nav-link'>
+										<button
+											className='btn btn-outline-light mr-2'
+											type='submit'>
+											Create Post
+										</button>
+									</Link>
+								</li>
 								<li className='nav-item nav-link dropdown'>
 									<button
 										className=' btn btn-outline-light mr-2  dropdown-toggle'
@@ -113,15 +122,7 @@ class Header extends Component {
 										</button>
 									</Link>
 								</li>
-								<li className='nav-item'>
-									<Link to={"/create-post"} className='nav-link'>
-										<button
-											className='btn btn-outline-light mr-2'
-											type='submit'>
-											Create Post
-										</button>
-									</Link>
-								</li>
+								
 							</div>
 						) : (
 							<div className='navbar-nav ml-auto'>
@@ -144,6 +145,16 @@ class Header extends Component {
 										</button>
 									</Link>
 								</li>
+								{/* <li>
+								<Link to={"/login"} className='nav-link'>
+										<button
+											className='btn btn-outline-light mr-2'
+											type='submit'
+											onClick={this.logOut}>
+											Sign Out
+										</button>
+									</Link>
+								</li> */}
 							</div>
 						)}
 					</div>

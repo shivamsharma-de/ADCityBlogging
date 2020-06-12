@@ -64,7 +64,7 @@ class Posts extends React.Component {
               {pageOfItems.map((post) => (
                
                   <div key={post._id}
-                    className=" col-lg-10"
+                    className=" col-lg-12"
                    
                   >
                   <div className="card text-center border-secondary card-style">

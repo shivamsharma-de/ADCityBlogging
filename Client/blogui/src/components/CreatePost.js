@@ -29,7 +29,7 @@ export class Createpost extends Component {
 		this.state = {
 			title: "",
 			content: "",
-			currentUser: "undefined",
+			currentUser: "",
 			successful: false,
 			message: "",
 			selectedCgt: "",
@@ -46,16 +46,16 @@ export class Createpost extends Component {
 			content: e.target.value,
 		});
 	}
-	//  componentDidMount() {
-	//   const user = AuthService.getCurrentUser();
+	 componentDidMount() {
+	  const user = AuthService.getCurrentUser();
 
-	//   if (user) {
-	//     this.setState({
-	//       currentUser: AuthService.getCurrentUser(),
+	  if (user) {
+	    this.setState({
+	      currentUser: AuthService.getCurrentUser(),
 
-	//     });
-	//   }
-	// }
+	    });
+	  }
+	}
 	handleSubmit(e) {
 		e.preventDefault();
 
