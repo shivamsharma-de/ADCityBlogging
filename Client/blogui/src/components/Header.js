@@ -55,6 +55,7 @@ class Header extends Component {
 					</button>
 					<div className='collapse navbar-collapse' id='navbarTogglerDemo01'>
 						<Link className='navbar-brand font-weight-bold' to='/'>
+						
 							<span className='h4' style={logoFont}>
 								City blogging
 							</span>
