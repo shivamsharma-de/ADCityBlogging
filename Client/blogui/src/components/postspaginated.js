@@ -51,7 +51,6 @@ class Posts extends React.Component {
 
   render() {
     const { pager, pageOfItems } = this.state;
-
     return (
       <div>
       <div className="fixed-top">
@@ -81,7 +80,7 @@ class Posts extends React.Component {
                   
                     </div>
                     <div className="card-footer d-flex justify-content-between">
-                    <Link to ="/"><FontAwesomeIcon icon={faThumbsUp} color="red"/></Link>
+                   <FontAwesomeIcon icon={faThumbsUp} style={{cursor: "pointer"}} color="red"/>
                     {/* <span><FontAwesomeIcon icon={faThumbsDown} color="red"/></span> */}
                     <p className="text-success">  <Moment fromNow>{post.date}</Moment></p>
                     

@@ -23,7 +23,7 @@ module.exports = function(app) {
  */
    
     app.get("/api/test/posts", controller.getPost);
-
+ 
 /**
  * @swagger
  * paths:

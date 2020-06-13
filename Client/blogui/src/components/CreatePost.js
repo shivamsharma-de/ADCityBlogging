@@ -214,7 +214,7 @@ export class Createpost extends Component {
 						</Form>
 					</div>
 				) : (
-					<div class='card text-center'>
+					<div class='card text-center mrgn'>
 						<div class='card-header'>Ooops!! You are not Authorized.</div>
 						<div class='card-body'>
 							<h5 class='card-title'>You are not Logged In</h5>
