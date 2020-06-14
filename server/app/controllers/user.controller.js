@@ -102,33 +102,31 @@ exports.moderatorBoard = (req, res) => {
 
 exports.searchuser=(req,res) => {
   const session = driver.session();
-  const id = req.params.id
+  const userid = req.params.id
   const keyword = req.body.keyword
 
   session
   .run(
     `MATCH (p:Person {idm: $id})-[:Follows]->(following) 
-    WITH "(" + apoc.text.join( collect(following.idm),' OR ') + ")^2" AS queryPart 
-    CALL db.index.fulltext.queryNodes('findperson', 'fullname: $keyword idm: ' + queryPart) 
-    YIELD node, score 
-    RETURN node.idm as userid, node.fullname as username, score`,
+    WITH "(" + apoc.text.join( collect(following.idm), ' OR ') + ")^2" AS queryPart
+     CALL db.index.fulltext.queryNodes('findperson', 'fullname: monica idm: ' + queryPart) YIELD node, score RETURN node, score ` ,
     {
-      id: id,
-      keyword:keyword ,
+      id:userid,
+      keyword: keyword
+
     }
   )
   .then(result => {
     console.log(result)
-    const commentarray =[];
+    const post =[];
     result.records.forEach(record => {
-        commentarray.push({
-            userid: record._fields[0],
-            username: record._fields[1],
-            score: record._fields[2],
+        post.push({
+            node: record._fields[0].properties,
+            score: record._fields[1]
         })
     })
 
-    res.send(commentarray)
+    res.send(post)
   })
   .catch(error => {
     console.log(error)

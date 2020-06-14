@@ -99,8 +99,8 @@ exports.searchpost = async (req, res) => {
 };
 exports.createcomment = async (req, res) => {
   const session2 = driver.session();
-  const uid = req.body.uid;
-  const pid = req.body.pid;
+  const uid = req.body.userid;
+  const pid = req.body.postid;
   const comment = req.body.comment;
 
   await session2

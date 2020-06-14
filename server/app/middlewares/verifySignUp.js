@@ -71,6 +71,10 @@ isLoggedin = async (req, res, next) => {
         message: `Session Not found`,
       });
     }
+    else {
+      var x = JSON.parse(reply)
+      console.log(x.user._id)
+    }
   });
   next();
 };
