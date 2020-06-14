@@ -44,12 +44,12 @@ class Sidebar extends Component {
 						</div>
 						<div className='input-group-btn d-flex justify-content-around py-3'>
 							<Link to={`/search/?q=${this.state.query}`}>
-								<button className='btn btn-secondary' type='button'>
+								<button className='btn btn-primary' type='button'>
 									Search in Posts
 								</button>
 							</Link>
 							<Link to={`/search`}>
-								<button className='btn btn-secondary' type='button'>
+								<button className='btn btn-success' type='button'>
 									Search in Users
 								</button>
 							</Link>
@@ -104,7 +104,12 @@ class Sidebar extends Component {
 				<div className='card my-4'>
 					<h5 className='card-header'>News</h5>
 					<div className='card-body'>
-						News Update will come here in future enhancements.
+					<img className="img-fluid float-left "
+                    width="40%"
+                src={require("./blog.png")}
+                alt="Blog"
+              />
+						<span classsName="float-right">News Update will come here in future enhancements.</span>
 					</div>
 				</div>
 			</div>

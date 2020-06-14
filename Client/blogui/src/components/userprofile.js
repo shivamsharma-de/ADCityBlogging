@@ -7,6 +7,7 @@ import Moment from "react-moment";
 import Sidebar from "./sidebar";
 import { Link, Redirect } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
 	faThumbsUp,
 	faThumbsDown,
@@ -76,13 +77,20 @@ const styleFooter = {
 };
 
 export class Userprofile extends Component {
+
+	// state= {
+	// 	isfollowing: false,
+	// }
+
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			posts: [],
 			user: {},
+			isfollowing: true,
 			redirectToUser: null,
+			
 		};
 	}
 	componentDidMount() {
@@ -117,14 +125,16 @@ export class Userprofile extends Component {
 	}
 
 	render() {
+		
 		const { posts } = this.state;
 		const { user } = this.state;
 
 		if (this.state.redirectToUser) {
 			return <Redirect to={`/userprofile/${this.state.redirectToUser}`} push />;
 		}
-
+		console.log(this.state.isfollowing);
 		return (
+			
 			<div>
 				<div className='fixed-top'>
 					<Header />
@@ -135,10 +145,14 @@ export class Userprofile extends Component {
 						<div class='col-lg-8'>
 							<div className='card card-body' style={{ padding: "5%" }}>
 								<div className='card-body text-left'>
+										<button type="submit" onClick={()=> this.setState({isfollowing: !this.state.isfollowing})} class={this.state.isfollowing ? " btn btn-success float-right" : "btn btn-danger float-right"}>
+											{this.state.isfollowing ? 'Follow' : 'Unfollow'}
+										</button>
 									<h3>
 										{user.firstname} {user.lastname}
-									</h3>
+									</h3>	
 									<hr />
+									
 									<p>{user.aboutme}</p>
 									<p>I ive in {user.city}</p>
 									go checkout me on{" "}
@@ -146,7 +160,6 @@ export class Userprofile extends Component {
 										{user.website}
 									</button>
 								</div>
-
 								<div className='container'>
 									<div className='d-flex'>
 										<div class='input-group m-3'>
@@ -189,6 +202,10 @@ export class Userprofile extends Component {
 										</div>
 									</div>
 								</div>
+								
+
+
+
 							</div>
 							<h5 className='mt-3'> Posts by Author {user.firstname}</h5>
 

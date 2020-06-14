@@ -4,7 +4,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Moment from "react-moment";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faThumbsUp, faThumbsDown, faComments} from '@fortawesome/free-solid-svg-icons'
+import { faThumbsUp, faThumbsDown, faComments, faUser} from '@fortawesome/free-solid-svg-icons'
 
 import Sidebar from "./sidebar";
 import './card.css'
@@ -51,7 +51,6 @@ class Posts extends React.Component {
 
   render() {
     const { pager, pageOfItems } = this.state;
-
     return (
       <div>
       <div className="fixed-top">
@@ -64,7 +63,7 @@ class Posts extends React.Component {
               {pageOfItems.map((post) => (
                
                   <div key={post._id}
-                    className=" col-lg-10"
+                    className=" col-lg-12"
                    
                   >
                   <div className="card text-center border-secondary card-style">
@@ -81,14 +80,14 @@ class Posts extends React.Component {
                   
                     </div>
                     <div className="card-footer d-flex justify-content-between">
-                    <Link to ="/"><FontAwesomeIcon icon={faThumbsUp} color="red"/></Link>
-                    {/* <span><FontAwesomeIcon icon={faThumbsDown} color="red"/></span> */}
+                    <span><FontAwesomeIcon className="mr-3" icon={faThumbsUp} style={{cursor: "pointer"}} color="red"/>
+                    <FontAwesomeIcon icon={faThumbsDown} color="red" style={{cursor: "pointer"}}/></span>
                     <p className="text-success">  <Moment fromNow>{post.date}</Moment></p>
                     
                       <Link to={`/userprofile/${post.user}`}>
    
-                    
-                      <span className="ml-5">by - </span> { post.author}
+                      
+                      <span><FontAwesomeIcon className="mr-1" icon={faUser} />{ post.author}</span> 
                
                       </Link>
                       <Link to ={`/userprofile/${post.user}`}><FontAwesomeIcon icon={faComments}/></Link>

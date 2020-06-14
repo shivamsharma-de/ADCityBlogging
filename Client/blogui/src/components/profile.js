@@ -8,10 +8,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Sidebar from "./sidebar";
 import Profileupdate from "../services/profileupdate"
-//Material UI
-import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+
 
 const styleFooter = {
   position: "absolute",
@@ -44,11 +41,11 @@ const email = value => {
 export default class Profile extends Component {
   constructor(props) {
     super(props);
-    // this.onChangeEmail = this.onChangeEmail.bind(this);
-    // this.onChangeCity = this.onChangeCity.bind(this);
-    // this.onChangeaboutme = this.onChangeaboutme.bind(this);
-    // this.onChangewebsite = this.onChangewebsite.bind(this);
-    // this.handleUpdate = this.handleUpdate.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onChangeCity = this.onChangeCity.bind(this);
+    this.onChangeaboutme = this.onChangeaboutme.bind(this);
+    this.onChangewebsite = this.onChangewebsite.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
     this.state = {
       firstname: "",
       lastname: "",
@@ -57,41 +54,41 @@ export default class Profile extends Component {
       email: "",
       city:"",
       aboutme:"",
-      currentUser: "5ecfdd7eac4e700011aad219",//AuthService.getCurrentUser(),
+      currentUser: AuthService.getCurrentUser(),
     };
   }
 
   
-  // onChangeEmail(e) {
-  //   this.setState({
-  //     email: e.target.value
-  //   });
-  // }
-  // onChangeCity(e) {
-  //   this.setState({
-  //     city: e.target.value
-  //   });
-  // }
-  // onChangeaboutme(e) {
-  //   this.setState({
-  //     aboutme: e.target.value
-  //   });
-  // }
-  // onChangewebsite(e) {
-  //   this.setState({
-  //     website: e.target.value
-  //   });
-  // }
-  // componentDidMount() {
-  //   const user = AuthService.getCurrentUser();
+  onChangeEmail(e) {
+    this.setState({
+      email: e.target.value
+    });
+  }
+  onChangeCity(e) {
+    this.setState({
+      city: e.target.value
+    });
+  }
+  onChangeaboutme(e) {
+    this.setState({
+      aboutme: e.target.value
+    });
+  }
+  onChangewebsite(e) {
+    this.setState({
+      website: e.target.value
+    });
+  }
+  componentDidMount() {
+    const user = AuthService.getCurrentUser();
 
-  //   if (user) {
-  //     this.setState({
-  //       currentUser: AuthService.getCurrentUser(),
+    if (user) {
+      this.setState({
+        currentUser: AuthService.getCurrentUser(),
     
-  //     });
-  //   }
-  // }
+      });
+    }
+  }
   handleUpdate(e){
     e.preventDefault();
 

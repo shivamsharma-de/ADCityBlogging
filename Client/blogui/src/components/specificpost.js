@@ -35,7 +35,7 @@ export class SpecificPost extends Component {
       post: {},
       title:"",
       content:"",
-      currentUser: "",//AuthService.getCurrentUser(),
+      currentUser: AuthService.getCurrentUser(),
       message:""
     };
   }
@@ -51,16 +51,16 @@ export class SpecificPost extends Component {
       content: e.target.value
     });
   }
-  // componentDidMount() {
-  //   const user = AuthService.getCurrentUser();
-  //   this.loadPage();
-  //   if (user) {
-  //     this.setState({
-  //       currentUser: AuthService.getCurrentUser(),
+  componentDidMount() {
+    const user = AuthService.getCurrentUser();
+    this.loadPage();
+    if (user) {
+      this.setState({
+        currentUser: AuthService.getCurrentUser(),
     
-  //     });
-  //   }
-  // }
+      });
+    }
+  }
 
   loadPage() {
     const id = this.props.match.params;
@@ -72,7 +72,7 @@ export class SpecificPost extends Component {
       });
   }
   updatepost(title, content){
-    // const user = AuthService.getCurrentUser();
+    const user = AuthService.getCurrentUser();
     const id = this.props.match.params;
     
     
@@ -86,10 +86,10 @@ export class SpecificPost extends Component {
 
 handledelete(e){
   e.preventDefault();
-  // this.setState({
-  //   message: "",
-  //   successful: true
-  // }); 
+  this.setState({
+    message: "",
+    successful: true
+  }); 
     const id = this.props.match.params;
 
        axios.delete( `http://localhost:5000/api/test/deletepost/${id.id}`,{

@@ -23,17 +23,17 @@ class Header extends Component {
 		};
 	}
 
-	// componentDidMount() {
-	//   const user = AuthService.getCurrentUser();
+	componentDidMount() {
+	  const user = AuthService.getCurrentUser();
 
-	//   if (user) {
-	//     this.setState({
-	//       currentUser: AuthService.getCurrentUser(),
+	  if (user) {
+	    this.setState({
+	      currentUser: AuthService.getCurrentUser(),
 
-	//       showAdminBoard: user.roles.includes("ROLE_ADMIN"),
-	//     });
-	//   }
-	// }
+	      showAdminBoard: user.roles.includes("ROLE_ADMIN"),
+	    });
+	  }
+	}
 
 	logOut() {
 		AuthService.logout();
@@ -55,6 +55,7 @@ class Header extends Component {
 					</button>
 					<div className='collapse navbar-collapse' id='navbarTogglerDemo01'>
 						<Link className='navbar-brand font-weight-bold' to='/'>
+						
 							<span className='h4' style={logoFont}>
 								City blogging
 							</span>
@@ -75,6 +76,15 @@ class Header extends Component {
 											className='btn btn-outline-light mr-2'
 											type='submit'>
 											Blog
+										</button>
+									</Link>
+								</li>
+								<li className='nav-item'>
+									<Link to={"/create-post"} className='nav-link'>
+										<button
+											className='btn btn-outline-light mr-2'
+											type='submit'>
+											Create Post
 										</button>
 									</Link>
 								</li>
@@ -113,15 +123,7 @@ class Header extends Component {
 										</button>
 									</Link>
 								</li>
-								<li className='nav-item'>
-									<Link to={"/create-post"} className='nav-link'>
-										<button
-											className='btn btn-outline-light mr-2'
-											type='submit'>
-											Create Post
-										</button>
-									</Link>
-								</li>
+								
 							</div>
 						) : (
 							<div className='navbar-nav ml-auto'>
@@ -144,6 +146,16 @@ class Header extends Component {
 										</button>
 									</Link>
 								</li>
+								{/* <li>
+								<Link to={"/login"} className='nav-link'>
+										<button
+											className='btn btn-outline-light mr-2'
+											type='submit'
+											onClick={this.logOut}>
+											Sign Out
+										</button>
+									</Link>
+								</li> */}
 							</div>
 						)}
 					</div>
