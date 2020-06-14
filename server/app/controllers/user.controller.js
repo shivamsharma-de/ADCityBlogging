@@ -33,6 +33,7 @@ exports.follow = async (req, res) =>{
   const username1 = user1.username;
   
   const username2 =  user2.username;
+  console.log(username1,username2)
 
   session
   .run(
@@ -56,22 +57,7 @@ exports.postsByUser = async (req, res) => {
 
   res.send(user.posts);
 };
-// exports.userconfirmation = async (req, res) => {
-//   await User.updateOne(
-//     { username: req.params.username,
-//       secrettoken:req.params.token
-    
-//     },
-//     const user = await User.fi(username)
-//     {
-//       $set: {
-//         active: true
-//       },
-//     }
-//   );
-// // http://our.api.com/Product?id=101404&id=7267261
-//   res.send("User was updated successfully!");
-// };
+
 exports.profileupdate = async (req, res) => {
   await User.updateOne(
     { _id: req.params.id },
@@ -113,3 +99,53 @@ exports.adminBoard = async (req, res) => {
 exports.moderatorBoard = (req, res) => {
   res.status(200).send("Moderator Content.");
 }
+
+exports.searchuser=(req,res) => {
+  const session = driver.session();
+  const id = req.params.id
+  const keyword = req.body.keyword
+
+  session
+  .run(
+    `MATCH (p:Person {idm: $id})-[:Follows]->(following) WITH "(" + apoc.text.join( collect(following.idm), ' OR ') + ")^2" AS queryPart CALL db.index.fulltext.queryNodes('findperson', 'fullname: $keyword idm: ' + queryPart) YIELD node, score RETURN node.idm as userid, node.fullname as username, score`,
+    {
+      id: id,
+      keyword:keyword ,
+    }
+  )
+  .then(result => {
+    const commentarray =[];
+    result.records.forEach(record => {
+        commentarray.push({
+            userid: record._fields[0],
+            username: record._fields[1],
+            score: record._fields[2],
+        })
+    })
+
+    res.send(commentarray)
+  })
+  .catch(error => {
+    console.log(error)
+  })
+  .then(() => {
+
+    session.close(() => {
+      console.log(` Followed`);
+    });
+  });
+}
+
+//posts
+// ` MATCH (p:Person) WHERE p.fullname = "Donald Trump" MATCH (p)-[:Wrote]->(post) WITH collect(post.pidm) AS myposts WITH "(" + apoc.text.join(myposts , " OR ") + ")^2" AS str CALL db.index.fulltext.queryNodes('searchposts', 'title: visa pidm: ' + str) YIELD node, score RETURN node.pidm, node.title, score`
+ // users
+ //     ` MATCH (p:Person {fullname: 'Dinesh Chugtai'})-[:Follows]->(following) WITH "(" + apoc.text.join( collect(following.idm), ' OR ') + ")^2" AS queryPart CALL db.index.fulltext.queryNodes('findperson', 'fullname: monica idm: ' + queryPart) YIELD node, score RETURN node.idm, node.fullname, score`,
+//  MATCH (p:Person)
+//  WHERE p.idm= "5edf426bf327d8954b13fb63"
+//  MATCH (p)-[:Wrote]->(post)
+//  WITH collect(post.pidm) AS myposts
+//  WITH "(" + apoc.text.join( myposts, " , " ) + ")^1" AS queryPart 
+//  CALL db.index.fulltext.queryNodes('posts', 'title: uk  visa  p.idm: ' + queryPart)
+//  YIELD node, score 
+//  RETURN node.pidm, node.title, score as totalscore, queryPart
+//  order by totalscore desc
