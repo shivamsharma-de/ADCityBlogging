@@ -107,13 +107,18 @@ exports.searchuser=(req,res) => {
 
   session
   .run(
-    `MATCH (p:Person {idm: $id})-[:Follows]->(following) WITH "(" + apoc.text.join( collect(following.idm), ' OR ') + ")^2" AS queryPart CALL db.index.fulltext.queryNodes('findperson', 'fullname: $keyword idm: ' + queryPart) YIELD node, score RETURN node.idm as userid, node.fullname as username, score`,
+    `MATCH (p:Person {idm: $id})-[:Follows]->(following) 
+    WITH "(" + apoc.text.join( collect(following.idm),' OR ') + ")^2" AS queryPart 
+    CALL db.index.fulltext.queryNodes('findperson', 'fullname: $keyword idm: ' + queryPart) 
+    YIELD node, score 
+    RETURN node.idm as userid, node.fullname as username, score`,
     {
       id: id,
       keyword:keyword ,
     }
   )
   .then(result => {
+    console.log(result)
     const commentarray =[];
     result.records.forEach(record => {
         commentarray.push({
