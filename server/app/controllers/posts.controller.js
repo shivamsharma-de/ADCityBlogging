@@ -27,10 +27,10 @@ exports.submitPost = async (req, res) => {
   const session2 = driver.session();
   user = req.params;
   id = user.id;
-  const { title, content, category } = req.body;
+  const { title, content, selectedCgt } = req.body;
   const userById = await User.findById(id);
   const username = userById.username;
-
+    console.log(selectedCgt)
   const post = await Post({
     title: title,
     content: content,
@@ -45,7 +45,7 @@ exports.submitPost = async (req, res) => {
   const id1 = post.id;
   const writeTxPromise = session.writeTransaction((tx) =>
     tx.run(
-      "MATCH ( a:Person { name: $username }) MERGE ( b: Post { name:$title, likes: 0, idm: $id1, comment: 0}) MERGE (a)-[: Wrote {created_at: TIMESTAMP()}]->(b)",
+      "MATCH ( a:Person { name: $username }) MERGE ( b: Post { title:$title, likes: 0, idm: $id1, comment: 0}) MERGE (a)-[: Wrote {created_at: TIMESTAMP()}]->(b)",
       { username: username, id1: id1, title: title }
     )
   );
@@ -53,10 +53,10 @@ exports.submitPost = async (req, res) => {
     console.log("in the write");
     const write1TxPromise = session.writeTransaction((tx) =>
       tx.run(
-        " MATCH (a:Post {idm: $id1}),(b:Category{name : $category}) CREATE (a)-[: Belongs_to ]->(b)",
+        " MATCH (a:Post {idm: $id1}),(b:Category{name : $selectedCgt}) CREATE (a)-[: Belongs_to ]->(b)",
         {
           id1: id1,
-          category: category,
+          selectedCgt: selectedCgt,
         }
       )
     );

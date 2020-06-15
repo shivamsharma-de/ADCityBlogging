@@ -5,12 +5,13 @@ const API_URL = "http://localhost:5000/api/test/createpost/";
 
 const API_URL2 = "http://localhost:5000/api/find/";
 class PostService {
-    createpost(title, content){
+    createpost(title, content, selectedCgt){
         const user = AuthService.getCurrentUser();
         console.log(user.id)
         return axios.post(API_URL  + user.id ,{
             title,
-            content
+            content,
+            selectedCgt
 
           });
           
