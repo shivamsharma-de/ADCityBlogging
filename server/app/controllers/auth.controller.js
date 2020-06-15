@@ -14,7 +14,7 @@ const Role = db.role;
 
 var bcrypt = require("bcryptjs");
 
-exports.signup = (req, res, next) => {
+ exports.signup = async(req, res) => {
   const user = new User({
     firstname: req.body.firstname,
     lastname: req.body.lastname,
@@ -24,35 +24,9 @@ exports.signup = (req, res, next) => {
     password: bcrypt.hashSync(req.body.password, 8),
     active: true,
   });
-  const session = driver.session();
-  session
-    .run("CREATE (n:Person {name: $username})", {
-      username: req.body.username,
-    })
-    .then(() => {
-      session.close(() => {
-        console.log(` addded in Person`);
-      });
-    });
-  const cgt = req.body.cgt;
 
-  cgt.forEach(function createrel(categoryName) {
-    const session = driver.session();
-    const username = req.body.username;
-    session
-      .run(
-        "MATCH (a:Person), (b:Category) WHERE a.name = $username AND b.name =  $categoryName CREATE (a)-[: Have_interests_in {created_at: TIMESTAMP()}]->(b) ",
-        {
-          categoryName: categoryName,
-          username: username,
-        }
-      )
-      .then(() => {
-        session.close(() => {
-          console.log(` addded in categories`);
-        });
-      });
-  });
+  
+
   user.save((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
@@ -100,6 +74,40 @@ exports.signup = (req, res, next) => {
       });
     }
   });
+  const session = driver.session();
+  idm = user.id;
+  const fullname = user.firstname + " " + user.lastname
+  console.log(fullname)
+
+  await session
+    .run("CREATE (n:Person {name: $username, idm:$idm, fullname:$fullname})", {
+      username: req.body.username,
+	  idm: idm,
+	  fullname: fullname
+    })
+    .then(() => {
+      session.close(() => {
+        console.log(` addded in Person`);
+      });
+    });
+  const cgt = req.body.cgt;
+
+cgt.forEach(createrel) 
+async function createrel(categoryName){
+    const session2 = driver.session();
+   console.log(categoryName)
+    const username = req.body.username;
+   await session2
+      .run(
+        "MATCH (a:Person), (b:Category) WHERE a.idm = $idm AND b.name =  $categoryName CREATE (a)-[: Have_interests_in {created_at: TIMESTAMP()}]->(b) ",
+        {
+          categoryName: categoryName,
+          idm: idm,
+        }
+      )
+     
+        await session2.close();
+	}
 };
 
 // exports.verifyemail = async (req,res) =>{

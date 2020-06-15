@@ -33,12 +33,12 @@ services:
     ports:
       - "6379:6379"
 
-  # neo4j:
-  #   image: neo4j
-  #   volumes:
-  #     - "./data:/data"
-  #     - "./log/log"
-  #   ports:
-  #     - "7474:7474"
-  #     - "7473:7473"
-  #     - "7687:7687"
+  neo4j:
+    image: neo4j
+    volumes:
+      - "./data:/data"
+      - "./log/log"
+    ports:
+      - "7474:7474"
+      - "7473:7473"
+      - "7687:7687"

@@ -38,7 +38,7 @@ function App() {
       <Route
       path="/search"
       component={(props) => <Searchpage {...props} />}
-    />
+      />
 
   </Switch>
   </BrowserRouter>

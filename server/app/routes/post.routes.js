@@ -22,7 +22,7 @@ module.exports = function(app) {
  * 
  */
    
-    app.get("/api/test/posts", verifySignUp.isLoggedin, controller.getPost);
+    app.get("/api/test/posts", isLoggedin, controller.getPost);
 
 /**
  * @swagger
@@ -120,5 +120,20 @@ module.exports = function(app) {
         "/api/find/:query", controller.searchpost
   
       );
-
+      app.post(
+        "/api/test/comment", controller.createcomment
+  
+      );
+      app.post(
+        "/api/test/getcomments", controller.getcomments
+  
+      );
+      app.post(
+        "/api/test/likepost", controller.likepost
+  
+      );
+      app.post(
+        "/api/test/searchpost/:id", controller.searchpost
+  
+      );
   };

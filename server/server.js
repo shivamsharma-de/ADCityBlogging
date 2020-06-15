@@ -3,10 +3,11 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+const corsMiddleware = require("./app/middlewares/cors");
 const cors = require("cors");
 const dbConfig = require("./app/config/db.config");
 
-var cookieParser = require('cookie-parser');
+var cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 
 // require('dotenv').config();
@@ -16,6 +17,9 @@ const session = require("./app/middlewares/session");
 app.use(cookieParser());
 app.use(session);
 
+//CORS logic
+app.options("*", corsMiddleware);
+app.use(corsMiddleware);
 
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
@@ -46,8 +50,6 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 // parse requests of content-type - application/json
 app.use(bodyParser.json({ limit: "50mb" }));
 
-
-
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 
@@ -69,8 +71,6 @@ db.mongoose
 		console.error("Connection error", err);
 		process.exit();
 	});
-
-
 
 // routes
 require("./app/routes/auth.routes")(app);
@@ -118,6 +118,4 @@ function initial() {
 			});
 		}
 	});
-
 }
-

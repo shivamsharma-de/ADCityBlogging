@@ -5,6 +5,8 @@ import Moment from "react-moment";
 import Sidebar from "./sidebar";
 import Header from "./Header";
 import Footer from "./Footer";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faThumbsUp, faComments, faUser} from '@fortawesome/free-solid-svg-icons'
 import './card.css'
 
 
@@ -56,29 +58,24 @@ export class Searchpage extends Component {
             <div><h2>You searched for "{query.q}"</h2></div>
             {posts.map((post) => (
   
-              <div key={post._id} className="col-lg-10">
-                  <div className="card text-center border-secondary card-style">
-   
-                    <Link to={`/singleposts/${post._id}`}>
-                      <div className="card-header text-white bg-secondary">
-                       <h5 className="card-title">{post.title}{" "}</h5>
-                      </div>
-                    </Link>
+              <div key={post._id} className="col-lg-12">
                   
-                  <div className="card-body">
-                    <p className="card-text">{post.content}</p>
+                <div className="list-group mrgn">
+                  <span href="#" className="list-group-item list-group-item-action flex-column align-items-start">
+                    <div className="d-flex w-100 justify-content-between">
                     
-                  </div>
-                  <div className="card-footer text-primary">
+                    <Link to={`/singleposts/${post._id}`}><h5 className="mb-1">{post.title}</h5></Link>
+                    <small className="text-success font-weight-bold"><Moment fromNow>{post.date}</Moment></small>
                     
-                    <p>  <Moment fromNow>{post.date}</Moment></p>
-                    by - <Link to={`/userprofile/${post.user}`}>
+                    </div>
                     
-                      { post.author}
-                    
-                    </Link>
-                  </div>
-               </div>
+                    <p className="mb-1">The keyword <span className="font-weight-bold">"{query.q}"</span> exists in this blog. Click on post title to check it out.</p>
+                    <FontAwesomeIcon className="float-left text-danger" icon={faThumbsUp}/>
+                    <Link to={`/userprofile/${post.user}`}><FontAwesomeIcon icon={faUser} /><small className="text-primary font-weight-bold ml-1">{ post.author}</small></Link>
+                    <FontAwesomeIcon color="orange" className="float-right" icon={faComments}/>
+                  </span>
+                </div>
+
              </div>
             ))}
             </div>

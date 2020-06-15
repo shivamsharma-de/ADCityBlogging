@@ -47,9 +47,14 @@ const UserSchema = mongoose.Schema({
     active: Boolean,
     gender: String,
     password: String,
+    reputation: String,
+    is_premium_member : Boolean,
     aboutme: String,
     city: String,
     website: String,
+    blocked_id:[
+      {type: mongoose.Schema.Types.ObjectId,ref:'User'}
+    ],
     posts : [
       {type: mongoose.Schema.Types.ObjectId,ref:'Posts'}
   ],

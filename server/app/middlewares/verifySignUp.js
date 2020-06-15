@@ -57,6 +57,7 @@ checkRolesExisted = (req, res, next) => {
 
 isLoggedin = async (req, res, next) => {
   const w = req.cookies.sessionId;
+
   if (!w) {
     return res.status(400).send("No cookie");
   }
@@ -70,6 +71,10 @@ isLoggedin = async (req, res, next) => {
       return res.status(401).send({
         message: `Session Not found`,
       });
+    }
+    else {
+      var x = JSON.parse(reply)
+      console.log(x.user)
     }
   });
   next();

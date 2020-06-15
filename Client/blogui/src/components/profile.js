@@ -9,6 +9,7 @@ import Footer from "./Footer";
 import Sidebar from "./sidebar";
 import Profileupdate from "../services/profileupdate"
 
+
 const styleFooter = {
   position: "absolute",
   width: "100%"
@@ -23,6 +24,8 @@ const required = value => {
     );
   }
 };
+
+
 
 const email = value => {
   if (!isEmail(value)) {
@@ -54,6 +57,8 @@ export default class Profile extends Component {
       currentUser: AuthService.getCurrentUser(),
     };
   }
+
+  
   onChangeEmail(e) {
     this.setState({
       email: e.target.value
@@ -143,7 +148,8 @@ export default class Profile extends Component {
         <div className="container mrgn">
           <div className="row">
           {currentUser ? (
-            <div className="col-lg-10">
+            <>
+            <div className="col-md-8">
           
             <div className="card">
             <Form onSubmit={this.handleUpdate}
@@ -151,7 +157,7 @@ export default class Profile extends Component {
               this.form = c;
             }}> 
             {!this.state.successful && (
-              <div>
+              <div className="p-3">
                 <div class="form-group">
                   <div class="row">
                     <div class="col">
@@ -241,6 +247,7 @@ export default class Profile extends Component {
                    rows="3"/>
                 </div>
                 <div>
+                  
                 <button type="submit" class=" btn btn-outline-info">
                   Update
                 </button>
@@ -272,7 +279,15 @@ export default class Profile extends Component {
            
   
             </div>
+            <div className="col-md-4">
+            <Sidebar />
+          
+            </div>
+            </>
+            
             ): (
+              
+              <div className="col-md-12">
               <div class="card text-center">
               <div class="card-header">
                 Ooops!! You are not Authorized.
@@ -286,11 +301,11 @@ export default class Profile extends Component {
               @MIA
               </div>
             </div>
-            )}
-            <div class="col-md-4">
-            <Sidebar />
-          
             </div>
+            
+          
+            )}
+            
           
           </div>
 

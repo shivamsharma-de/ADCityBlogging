@@ -26,14 +26,18 @@ exports.follow = async (req, res) =>{
   const session = driver.session();
   const u  = req.params;
   const id1 = u.id
-  const id2  = req.body.id;
+  const id2  = req.body.id2;
+  
   const user1 =  await User.findById(id1);
-  const user2 = await User.findById(id2);
-  const username1 = user1.username
-  const username2 = user2.username
+  const user2 =  await User.findById(id2);
+  const username1 = user1.username;
+  
+  const username2 =  user2.username;
+  console.log(username1,username2)
+
   session
   .run(
-    "MATCH (a:Person), (b:Person) WHERE a.name = $username1 AND b.name =  $username2 CREATE (a)-[: Follows {created_at: TIMESTAMP()}]->(b) ",
+    "MATCH (a:Person), (b:Person) WHERE a.name = $username1 AND b.name =  $username2 MERGE (a)-[: Follows {created_at: TIMESTAMP()}]->(b) ",
     {
       username1: username1,
       username2: username2,
@@ -53,22 +57,7 @@ exports.postsByUser = async (req, res) => {
 
   res.send(user.posts);
 };
-// exports.userconfirmation = async (req, res) => {
-//   await User.updateOne(
-//     { username: req.params.username,
-//       secrettoken:req.params.token
-    
-//     },
-//     const user = await User.fi(username)
-//     {
-//       $set: {
-//         active: true
-//       },
-//     }
-//   );
-// // http://our.api.com/Product?id=101404&id=7267261
-//   res.send("User was updated successfully!");
-// };
+
 exports.profileupdate = async (req, res) => {
   await User.updateOne(
     { _id: req.params.id },
@@ -110,3 +99,47 @@ exports.adminBoard = async (req, res) => {
 exports.moderatorBoard = (req, res) => {
   res.status(200).send("Moderator Content.");
 }
+
+exports.searchuser=(req,res) => {
+  const session = driver.session();
+  const userid = req.params.id
+  const kkeyword = req.body.keyword
+  session
+  .run(
+    `MATCH (p:Person {idm: $id})-[:Follows]->(following) 
+    WITH "(" + apoc.text.join( collect(following.idm), ' OR ') + ")^2" AS queryPart
+     CALL db.index.fulltext.queryNodes('findperson', 'fullname:  ${kkeyword}  idm:'  + queryPart) YIELD node, score RETURN node, score ` ,
+    {
+      id:userid,
+      keyword: kkeyword
+
+    }
+  )
+  .then(result => {
+    console.log(result)
+    const post =[];
+    result.records.forEach(record => {
+        post.push({
+            node: record._fields[0].properties,
+            score: record._fields[1]
+        })
+    })
+
+    res.send(post)
+  })
+  .catch(error => {
+    console.log(error)
+  })
+  .then(() => {
+
+    session.close(() => {
+      console.log(` Followed`);
+    });
+  });
+}
+
+//posts
+// ` MATCH (p:Person) WHERE p.fullname = "Donald Trump" MATCH (p)-[:Wrote]->(post) WITH collect(post.pidm) AS myposts WITH "(" + apoc.text.join(myposts , " OR ") + ")^2" AS str CALL db.index.fulltext.queryNodes('searchposts', 'title: visa pidm: ' + str) YIELD node, score RETURN node.pidm, node.title, score`
+ // users
+ //     ` MATCH (p:Person {fullname: 'Dinesh Chugtai'})-[:Follows]->(following) WITH "(" + apoc.text.join( collect(following.idm), ' OR ') + ")^2" AS queryPart CALL db.index.fulltext.queryNodes('findperson', 'fullname: monica idm: ' + queryPart) YIELD node, score RETURN node.idm, node.fullname, score`,
+

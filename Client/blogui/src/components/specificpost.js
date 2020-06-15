@@ -18,6 +18,10 @@ const required = value => {
     );
   }
 };
+const styleFooter = {
+  position: "absolute",
+  width: "100%"
+};
 
 export class SpecificPost extends Component {
   constructor(props) {
@@ -68,7 +72,7 @@ export class SpecificPost extends Component {
       });
   }
   updatepost(title, content){
-    // const user = AuthService.getCurrentUser();
+    //const user = AuthService.getCurrentUser();
     const id = this.props.match.params;
     
     
@@ -82,10 +86,10 @@ export class SpecificPost extends Component {
 
 handledelete(e){
   e.preventDefault();
-  // this.setState({
-  //   message: "",
-  //   successful: true
-  // }); 
+  this.setState({
+    message: "",
+    successful: true
+  }); 
     const id = this.props.match.params;
 
        axios.delete( `http://localhost:5000/api/test/deletepost/${id.id}`,{
@@ -146,20 +150,17 @@ handledelete(e){
     console.log(currentUser);
     const { post } = this.state;
  
-    
-   
- console.log(currentUser);
     return (
       <div>
       <div className="fixed-top">
       <Header/>
       </div>
 
-        <div className="container">
+        <div className="container mrgn">
           <div className="row">
           {currentUser.username === post.author ? (
             <div class="col-lg-8">
-            <Form style={{marginTop:"50px"}} onSubmit={this.handleUpdate}
+            <Form onSubmit={this.handleUpdate}
             ref={c => {
               this.form = c;
             }}> 
@@ -271,7 +272,8 @@ handledelete(e){
             </div>
           </div>
         </div>
-        <Footer />
+        <div style={styleFooter}><Footer /></div>
+        
       </div>
     );
   }
