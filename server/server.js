@@ -23,7 +23,7 @@ app.use(corsMiddleware);
 
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
-//app.use(cors());
+app.use(cors());
 
 // swagger definition
 const swaggerOptions = {

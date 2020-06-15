@@ -76,10 +76,14 @@ var bcrypt = require("bcryptjs");
   });
   const session = driver.session();
   idm = user.id;
+  const fullname = user.firstname + " " + user.lastname
+  console.log(fullname)
+
   await session
-    .run("CREATE (n:Person {name: $username, idm:$idm})", {
+    .run("CREATE (n:Person {name: $username, idm:$idm, fullname:$fullname})", {
       username: req.body.username,
-      idm: idm,
+	  idm: idm,
+	  fullname: fullname
     })
     .then(() => {
       session.close(() => {

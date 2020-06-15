@@ -22,8 +22,8 @@ module.exports = function(app) {
  * 
  */
    
-    app.get("/api/test/posts", controller.getPost);
- 
+    app.get("/api/test/posts", isLoggedin, controller.getPost);
+
 /**
  * @swagger
  * paths:
@@ -130,6 +130,10 @@ module.exports = function(app) {
       );
       app.post(
         "/api/test/likepost", controller.likepost
+  
+      );
+      app.post(
+        "/api/test/searchpost/:id", controller.searchpost
   
       );
   };
