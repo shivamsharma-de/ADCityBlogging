@@ -169,7 +169,6 @@ exports.searchpost=(req,res) => {
     const session = driver.session();
     const userid = req.params.id
     const kkeyword = req.body.keyword
-  console.log(typeof(kkeyword))
     session
     .run(
         ` MATCH (p:Person)

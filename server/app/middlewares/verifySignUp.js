@@ -74,7 +74,7 @@ isLoggedin = async (req, res, next) => {
     }
     else {
       var x = JSON.parse(reply)
-      console.log(x.user._id)
+      console.log(x.user)
     }
   });
   next();
