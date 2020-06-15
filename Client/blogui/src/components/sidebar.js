@@ -2,7 +2,7 @@
 
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-
+import AuthService from "../services/auth.service";
 class Sidebar extends Component {
 	constructor(props) {
 		super(props);
@@ -18,8 +18,18 @@ class Sidebar extends Component {
 		});
 	};
 	onHandleGo(e) {}
-
+	componentDidMount() {
+		const user = AuthService.getCurrentUser();
+	
+		if (user) {
+		  this.setState({
+			currentUser: AuthService.getCurrentUser(),
+		
+		  });
+		}
+	  }
 	render() {
+		const { currentUser } = this.state;
 		return (
 			<div>
 				<div className='card'>
@@ -48,7 +58,7 @@ class Sidebar extends Component {
 									Search in Posts
 								</button>
 							</Link>
-							<Link to={`/search`}>
+							<Link to={`/searchuser/?q=${this.state.query}`}>
 								<button className='btn btn-success' type='button'>
 									Search in Users
 								</button>

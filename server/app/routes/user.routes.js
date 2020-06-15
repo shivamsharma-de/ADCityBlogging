@@ -36,6 +36,6 @@ module.exports = function(app) {
     controller.adminBoard
   );
   app.post("/api/test/follow/:id", controller.follow );
-  app.post("/api/test/searchuser/:id", controller.searchuser );
+  app.post("/api/test/searchuser/:id/:q", controller.searchuser );
 };
 

@@ -116,10 +116,7 @@ module.exports = function(app) {
  * 
  */
 
-  app.get(
-        "/api/find/:query", controller.searchpost
-  
-      );
+
       app.post(
         "/api/test/comment", controller.createcomment
   

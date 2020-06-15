@@ -16,7 +16,7 @@ const styleFooter = {
 }
 
 
-export class Searchpage extends Component {
+export class Searchpageuser extends Component {
     constructor(props) {
         super(props)
     
@@ -26,6 +26,7 @@ export class Searchpage extends Component {
         }
     }
     componentDidMount(){
+
         this.loadPage()
        
      
@@ -33,17 +34,16 @@ export class Searchpage extends Component {
     loadPage() {
    const query = new queryString.parse(this.props.location.search)
    const loggeduser = JSON.parse(localStorage.getItem('user'));
-        fetch(`http://localhost:5000/api/test/searchpost/${loggeduser.id}/${query.q}`, { method: "POST" })
+   console.log(loggeduser)  
+        fetch(`http://localhost:5000/api/test/searchuser/${loggeduser.id}/${query.q}`, { method: "POST" })
           .then((response) => response.json())
-          .then((posts) => {
-            this.setState(() => ({ posts }));
-            
+          .then((users) => {
+            this.setState(() => ({ users }));
           });
-        
       }
     
-    render() {
-        const {posts} = this.state
+      render() {
+        const {users} = this.state
         // window.location.reload();
         const query = new queryString.parse(this.props.location.search)
         return (
@@ -56,15 +56,15 @@ export class Searchpage extends Component {
               <div className="row">
             <div className="col-lg-8" >
             <div><h2>You searched for "{query.q}"</h2></div>
-            {posts.map((post) => (
+            {users.map((useri) => (
   
-              <div key={post.id} className="col-lg-12">
+              <div key={useri.id} className="col-lg-12">
                   
                 <div className="list-group mrgn">
                   <span href="#" className="list-group-item list-group-item-action flex-column align-items-start">
                     <div className="d-flex w-100 justify-content-between">
                     
-                    <Link to={`/singleposts/${post.id}`}><h5 className="mb-1">{post.title}</h5></Link>
+                    <Link to={`/specificuser/${useri.id}`}><h5 className="mb-1">{useri.name}</h5></Link>
            
                     
                     </div>
@@ -91,4 +91,4 @@ export class Searchpage extends Component {
     }
 }
 
-export default Searchpage
+export default Searchpageuser

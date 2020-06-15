@@ -4,8 +4,8 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 // import Signup from "./Signup";
 // import Admin from './admincomponent';
-
 import AuthService from "../services/auth.service";
+
 
 const logoFont = {
 	fontFamily: "'Pacifico', cursive",

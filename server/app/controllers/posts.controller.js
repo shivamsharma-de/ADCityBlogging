@@ -86,17 +86,7 @@ exports.updatepost = async (req, res) => {
   );
   res.send("User was updated successfully!");
 };
-exports.searchpost = async (req, res) => {
-  search = req.params.query;
-  const searchpost = await Post.find({
-    $or: [
-      { title: { $regex: search, $options: "i" } },
-      { content: { $regex: search, $options: "i" } },
-      { author: { $regex: search, $options: "i" } },
-    ],
-  });
-  res.send(searchpost);
-};
+
 exports.createcomment = async (req, res) => {
   const session2 = driver.session();
   const uid = req.body.userid;
