@@ -165,3 +165,46 @@ exports.getcomments = async (req, res) => {
           .then(() => session.close())
     
 };
+exports.searchpost=(req,res) => {
+    const session = driver.session();
+    const userid = req.params.id
+    const kkeyword = req.body.keyword
+  console.log(typeof(kkeyword))
+    session
+    .run(
+        ` MATCH (p:Person)
+        WHERE p.idm= $id
+        MATCH (p)-[:Wrote]->(post)
+        WITH collect(post.pidm) AS myposts
+        WITH "(" + apoc.text.join( myposts, " , " ) + ")^1" AS queryPart 
+        CALL db.index.fulltext.queryNodes('posts', 'title: ${kkeyword}  p.idm: ' + queryPart)
+        YIELD node, score 
+        RETURN node, score ` ,
+      {
+        id:userid,
+        keyword: kkeyword
+  
+      }
+    )
+    .then(result => {
+      console.log(result)
+      const post =[];
+      result.records.forEach(record => {
+          post.push({
+              node: record._fields[0].properties,
+              score: record._fields[1]
+          })
+      })
+  
+      res.send(post)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+    .then(() => {
+  
+      session.close(() => {
+        console.log(` Followed`);
+      });
+    });
+  }

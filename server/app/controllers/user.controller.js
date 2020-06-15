@@ -103,16 +103,16 @@ exports.moderatorBoard = (req, res) => {
 exports.searchuser=(req,res) => {
   const session = driver.session();
   const userid = req.params.id
-  const keyword = req.body.keyword
-
+  const kkeyword = req.body.keyword
+console.log(typeof(kkeyword))
   session
   .run(
     `MATCH (p:Person {idm: $id})-[:Follows]->(following) 
     WITH "(" + apoc.text.join( collect(following.idm), ' OR ') + ")^2" AS queryPart
-     CALL db.index.fulltext.queryNodes('findperson', 'fullname: monica idm: ' + queryPart) YIELD node, score RETURN node, score ` ,
+     CALL db.index.fulltext.queryNodes('findperson', 'fullname:  ${kkeyword}  idm:'  + queryPart) YIELD node, score RETURN node, score ` ,
     {
       id:userid,
-      keyword: keyword
+      keyword: kkeyword
 
     }
   )
@@ -143,12 +143,4 @@ exports.searchuser=(req,res) => {
 // ` MATCH (p:Person) WHERE p.fullname = "Donald Trump" MATCH (p)-[:Wrote]->(post) WITH collect(post.pidm) AS myposts WITH "(" + apoc.text.join(myposts , " OR ") + ")^2" AS str CALL db.index.fulltext.queryNodes('searchposts', 'title: visa pidm: ' + str) YIELD node, score RETURN node.pidm, node.title, score`
  // users
  //     ` MATCH (p:Person {fullname: 'Dinesh Chugtai'})-[:Follows]->(following) WITH "(" + apoc.text.join( collect(following.idm), ' OR ') + ")^2" AS queryPart CALL db.index.fulltext.queryNodes('findperson', 'fullname: monica idm: ' + queryPart) YIELD node, score RETURN node.idm, node.fullname, score`,
-//  MATCH (p:Person)
-//  WHERE p.idm= "5edf426bf327d8954b13fb63"
-//  MATCH (p)-[:Wrote]->(post)
-//  WITH collect(post.pidm) AS myposts
-//  WITH "(" + apoc.text.join( myposts, " , " ) + ")^1" AS queryPart 
-//  CALL db.index.fulltext.queryNodes('posts', 'title: uk  visa  p.idm: ' + queryPart)
-//  YIELD node, score 
-//  RETURN node.pidm, node.title, score as totalscore, queryPart
-//  order by totalscore desc
+
