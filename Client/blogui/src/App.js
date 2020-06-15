@@ -16,6 +16,7 @@ import Userprofile from './components/userprofile';
 import Admin from './components/admincomponent';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Searchpage from './components/searchpagelanding'
+import Searchpageuser from './components/saerchuser';
 
 function App() {
   return (
@@ -38,6 +39,10 @@ function App() {
       <Route
       path="/search"
       component={(props) => <Searchpage {...props} />}
+      />
+            <Route
+      path="/searchuser"
+      component={(props) => <Searchpageuser {...props} />}
       />
 
   </Switch>
