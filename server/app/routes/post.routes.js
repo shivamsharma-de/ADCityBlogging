@@ -132,4 +132,8 @@ module.exports = function(app) {
         "/api/test/likepost", controller.likepost
   
       );
+      app.post(
+        "/api/test/searchpost/:id", controller.searchpost
+  
+      );
   };

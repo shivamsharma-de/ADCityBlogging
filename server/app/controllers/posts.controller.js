@@ -176,7 +176,7 @@ exports.searchpost=(req,res) => {
         WHERE p.idm= $id
         MATCH (p)-[:Wrote]->(post)
         WITH collect(post.pidm) AS myposts
-        WITH "(" + apoc.text.join( myposts, " , " ) + ")^1" AS queryPart 
+        WITH "(" + apoc.text.join( myposts, " OR " ) + ")^3" AS queryPart 
         CALL db.index.fulltext.queryNodes('posts', 'title: ${kkeyword}  p.idm: ' + queryPart)
         YIELD node, score 
         RETURN node, score ` ,
