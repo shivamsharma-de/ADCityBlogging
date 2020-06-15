@@ -148,6 +148,7 @@ export default class Profile extends Component {
         <div className="container mrgn">
           <div className="row">
           {currentUser ? (
+            <>
             <div className="col-md-8">
           
             <div className="card">
@@ -278,7 +279,15 @@ export default class Profile extends Component {
            
   
             </div>
+            <div className="col-md-4">
+            <Sidebar />
+          
+            </div>
+            </>
+            
             ): (
+              
+              <div className="col-md-12">
               <div class="card text-center">
               <div class="card-header">
                 Ooops!! You are not Authorized.
@@ -292,11 +301,11 @@ export default class Profile extends Component {
               @MIA
               </div>
             </div>
-            )}
-            <div class="col-md-4">
-            <Sidebar />
-          
             </div>
+            
+          
+            )}
+            
           
           </div>
 

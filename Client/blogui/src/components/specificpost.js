@@ -72,7 +72,7 @@ export class SpecificPost extends Component {
       });
   }
   updatepost(title, content){
-    const user = AuthService.getCurrentUser();
+    //const user = AuthService.getCurrentUser();
     const id = this.props.match.params;
     
     
@@ -150,9 +150,6 @@ handledelete(e){
     console.log(currentUser);
     const { post } = this.state;
  
-    
-   
- console.log(currentUser);
     return (
       <div>
       <div className="fixed-top">

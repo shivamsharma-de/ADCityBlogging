@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
 	faThumbsUp,
-	faThumbsDown,
+	//faThumbsDown,
 	faComments,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -78,9 +78,7 @@ const styleFooter = {
 
 export class Userprofile extends Component {
 
-	// state= {
-	// 	isfollowing: false,
-	// }
+	
 
 	constructor(props) {
 		super(props);
@@ -90,6 +88,7 @@ export class Userprofile extends Component {
 			user: {},
 			isfollowing: true,
 			redirectToUser: null,
+			
 			
 		};
 	}
@@ -104,7 +103,7 @@ export class Userprofile extends Component {
 			redirectToUser: event.target.value,
 		});
 	};
-
+	
 	loadPage() {
 		const id = this.props.match.params;
 		console.log(id);
@@ -142,12 +141,14 @@ export class Userprofile extends Component {
 
 				<div class='container mrgn'>
 					<div class='row'>
+						
 						<div class='col-lg-8'>
 							<div className='card card-body' style={{ padding: "5%" }}>
 								<div className='card-body text-left'>
-										<button type="submit" onClick={()=> this.setState({isfollowing: !this.state.isfollowing})} class={this.state.isfollowing ? " btn btn-success float-right" : "btn btn-danger float-right"}>
+									<button type="submit" onClick={()=> this.setState({isfollowing: !this.state.isfollowing})} class={this.state.isfollowing ? " btn btn-success float-right" : "btn btn-danger float-right"}>
 											{this.state.isfollowing ? 'Follow' : 'Unfollow'}
-										</button>
+										
+									</button>	
 									<h3>
 										{user.firstname} {user.lastname}
 									</h3>	
@@ -190,7 +191,7 @@ export class Userprofile extends Component {
 												</label>
 											</div>
 											<select
-                        onChange={(event) => this.redirectToUserPage(event)}
+                        	onChange={(event) => this.redirectToUserPage(event)}
 												class='custom-select'
 												id='inputGroupSelect01'>
 												{follower.map((elem) => {
@@ -209,42 +210,7 @@ export class Userprofile extends Component {
 							</div>
 							<h5 className='mt-3'> Posts by Author {user.firstname}</h5>
 
-							{/* {posts.map((post1) => ( 
-                <article key={post1._id}>
-                  
-              <h1 class="mt-4">{post1.title}</h1>
-
-            
-                by
-                <Link to={`/userprofile/${post1._id}`}>
-                <button type="button" className="btn btn-link">
-                  {post1.author}
-                </button>
-             
-                </Link>
-             
-
-              <hr />
-
-              <p>
-                <Moment format="Do MMMM YYYY - HH:mm">{post1.date}</Moment>
-              </p>
-
-              <hr />
-
-              <img
-                class="img-fluid rounded"
-                src="https://miro.medium.com/max/900/1*po2qa7P4OK9jFMzeE0o7vQ.png"
-                alt=""
-              />
-
-              <hr />
-
-              <p class="lead">{post1.content}</p>
-             
-              </article>
-             
-              ))} */}
+							
 
 							{posts.map((post) => (
 								<div key={post._id} className=' col-md-12'>
@@ -279,7 +245,7 @@ export class Userprofile extends Component {
 												<span className='ml-5'>by - </span> {post.author}
 											</Link>
 											<Link to={`/userprofile/${post.user}`}>
-												<FontAwesomeIcon icon={faComments} />
+												<FontAwesomeIcon color="orange" icon={faComments} />
 											</Link>
 										</div>
 									</div>

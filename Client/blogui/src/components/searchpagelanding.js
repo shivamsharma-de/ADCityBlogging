@@ -6,7 +6,7 @@ import Sidebar from "./sidebar";
 import Header from "./Header";
 import Footer from "./Footer";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faThumbsUp, faThumbsDown, faComments, faUser} from '@fortawesome/free-solid-svg-icons'
+import { faThumbsUp, faComments, faUser} from '@fortawesome/free-solid-svg-icons'
 import './card.css'
 
 
@@ -65,13 +65,14 @@ export class Searchpage extends Component {
                     <div className="d-flex w-100 justify-content-between">
                     
                     <Link to={`/singleposts/${post._id}`}><h5 className="mb-1">{post.title}</h5></Link>
-                    <Link to={`/userprofile/${post.user}`}><FontAwesomeIcon icon={faUser} /><small className="text-primary font-weight-bold ml-1">Posted by- { post.author}</small></Link>
+                    <small className="text-success font-weight-bold"><Moment fromNow>{post.date}</Moment></small>
+                    
                     </div>
                     
                     <p className="mb-1">The keyword <span className="font-weight-bold">"{query.q}"</span> exists in this blog. Click on post title to check it out.</p>
                     <FontAwesomeIcon className="float-left text-danger" icon={faThumbsUp}/>
-                    <small className="text-success font-weight-bold"><Moment fromNow>{post.date}</Moment></small>
-                    <FontAwesomeIcon className="float-right text-primary" icon={faComments}/>
+                    <Link to={`/userprofile/${post.user}`}><FontAwesomeIcon icon={faUser} /><small className="text-primary font-weight-bold ml-1">{ post.author}</small></Link>
+                    <FontAwesomeIcon color="orange" className="float-right" icon={faComments}/>
                   </span>
                 </div>
 

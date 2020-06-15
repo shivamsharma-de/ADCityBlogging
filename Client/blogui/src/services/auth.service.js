@@ -31,7 +31,8 @@ class AuthService {
 	logout() {
     return axios.delete(API_URL + "signout", {withCredentials: true} ).then(response => {
       console.log("cookie deleted", response);
-      localStorage.removeItem("user");
+	  localStorage.removeItem("user");
+	  window.location.reload();
     });    
 	}
 
