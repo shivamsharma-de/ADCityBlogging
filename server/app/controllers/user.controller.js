@@ -111,7 +111,7 @@ session
     WHERE p.idm= $id
     MATCH (p)-[:Follows]->(following)
     WITH collect(following.idm) AS myposts
-    WITH "(" + apoc.text.join( myposts, " OR " ) + ")^3" AS queryPart 
+    WITH "(" + apoc.text.join( myposts, " AND " ) + ")^3" AS queryPart 
     CALL db.index.fulltext.queryNodes('findperson', 'fullname: ${kkeyword}  idm: ' + queryPart)
     YIELD node, score 
     RETURN node.idm, node.fullname,  score ` ,
@@ -123,16 +123,16 @@ session
   )
   .then(result => {
     console.log(result)
-    const users =[];
+    const data =[];
     result.records.forEach(record => {
-        users.push({
+        data.push({
             id: record._fields[0],
             name: record._fields[1],
             score: record._fields[2]
         })
     })
 
-    res.send(users).status(200)
+    res.send(data).status(200)
   })
   .catch(error => {
     res.send(error)

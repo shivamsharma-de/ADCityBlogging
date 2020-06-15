@@ -21,7 +21,7 @@ export class Searchpageuser extends Component {
         super(props)
     
         this.state = {
-            posts:[]
+            data:[]
              
         }
     }
@@ -37,13 +37,13 @@ export class Searchpageuser extends Component {
    console.log(loggeduser)  
         fetch(`http://localhost:5000/api/test/searchuser/${loggeduser.id}/${query.q}`, { method: "POST" })
           .then((response) => response.json())
-          .then((users) => {
-            this.setState(() => ({ users }));
+          .then((data) => {
+            this.setState(() => ({ data }));
           });
       }
     
       render() {
-        const {users} = this.state
+        const {data} = this.state
         // window.location.reload();
         const query = new queryString.parse(this.props.location.search)
         return (
@@ -56,15 +56,15 @@ export class Searchpageuser extends Component {
               <div className="row">
             <div className="col-lg-8" >
             <div><h2>You searched for "{query.q}"</h2></div>
-            {users.map((useri) => (
+            {data.map((post) => (
   
-              <div key={useri.id} className="col-lg-12">
+              <div key={post.id} className="col-lg-12">
                   
                 <div className="list-group mrgn">
                   <span href="#" className="list-group-item list-group-item-action flex-column align-items-start">
                     <div className="d-flex w-100 justify-content-between">
                     
-                    <Link to={`/specificuser/${useri.id}`}><h5 className="mb-1">{useri.name}</h5></Link>
+                    <Link to={`/singleposts/${post.id}`}><h5 className="mb-1">{post.name}</h5></Link>
            
                     
                     </div>

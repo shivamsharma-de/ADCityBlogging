@@ -130,7 +130,7 @@ module.exports = function(app) {
   
       );
       app.post(
-        "/api/test/searchpost/:id", controller.searchpost
+        "/api/test/searchpost/:id/:q", controller.searchpost
   
       );
   };

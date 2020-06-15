@@ -157,20 +157,20 @@ exports.getcomments = async (req, res) => {
 };
 exports.searchpost=(req,res) => {
     const session = driver.session();
-    const userid = req.params.id
-    const kkeyword = req.body.keyword
+    const id = req.params.id
+    const kkeyword = req.params.q
     session
     .run(
         ` MATCH (p:Person)
         WHERE p.idm= $id
-        MATCH (p)-[:Wrote]->(post)
-        WITH collect(post.pidm) AS myposts
-        WITH "(" + apoc.text.join( myposts, " OR " ) + ")^3" AS queryPart 
-        CALL db.index.fulltext.queryNodes('posts', 'title: ${kkeyword}  p.idm: ' + queryPart)
+        MATCH (p)-[:Wrote]->(posts)
+        WITH collect(posts.pidm) AS myposts
+        WITH "(" + apoc.text.join( myposts, " AND " ) + ")^3" AS queryPart 
+        CALL db.index.fulltext.queryNodes('posts', 'title: ${kkeyword}  pidm: ' + queryPart)
         YIELD node, score 
-        RETURN node, score ` ,
+        RETURN node.pidm, node.title, score ` ,
       {
-        id:userid,
+        id:id,
         keyword: kkeyword
   
       }
@@ -180,8 +180,9 @@ exports.searchpost=(req,res) => {
       const post =[];
       result.records.forEach(record => {
           post.push({
-              node: record._fields[0].properties,
-              score: record._fields[1]
+            id: record._fields[0],
+            title: record._fields[1],
+            score: record._fields[2]
           })
       })
   
