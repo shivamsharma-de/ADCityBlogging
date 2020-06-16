@@ -9,15 +9,123 @@ exports.userByPost = async (req, res) => {
   const userByPost = await Post.findById(id).populate("user");
   res.send(userByPost);
 };
+// if( Match (p1:Person)-[:Follows]->(p2:Person) )
+// {
+// MATCH (p1:Person{idm:"5edf4299f327d8954b13fb65"})-[:Follows]->(p2:Person)-[:Wrote]->(p3:Post)-[:Belongs_to]->(c:Category)  RETURN p3.name,p3.idm
+// }
+// else
+// {
 
+// MATCH (p1:Person{idm:$id})-[:Have_interests_in]->(c:Category)<-[:Belongs_to]-(p3:Post) RETURN p3.name, p3.idm
+// }
 exports.getPost = async (req, res) => {
-  const posta = await Post.find().sort({ date: -1 });
+    const userid = req.params.id;
+    const session4 = driver.session();
+    const session5 = driver.session();
+    const session6 = driver.session();
+    session4
+    .run(
+      `MATCH (p:Person)
+      WHERE p.idm= $id
+      MATCH (p)-[:Follows]->(p2) WITH collect(p2.idm) AS myposts RETURN myposts` ,
+        {
+        id:userid,
+      }
+    )
+    .then(result => {
+        const data =[];
+        result.records.forEach(record => {
+            data.push({
+                myposts: record._fields[0],
+                
+                
+                
+            })
+        })
+        
+   if (data.length === 0){
 
-  const page = parseInt(req.query.page) || 1;
-  const pageSize = 5;
-  const pager = paginate(posta.length, page, pageSize);
-  const pageOfItems = posta.slice(pager.startIndex, pager.endIndex + 1);
-  res.status(200).send({ pager, pageOfItems });
+    session5
+    .run(
+      ` MATCH (p1:Person{idm:$id})-[:Have_interests_in]->(c:Category)<-[:Belongs_to]-(p3:Post) RETURN p3.title, p3.pidm ` ,
+        {
+        id:userid
+  
+      }
+    )
+    .then(result => {
+      console.log(result)
+      const data1 =[];
+      result.records.forEach(record => {
+          data1.push({
+              title: record._fields[0],
+              id: record._fields[1],
+              
+              
+          })
+      })
+  
+      res.send(data1).status(200)
+    })
+    .catch(error => {
+      res.send(error)
+    })
+    .then(() => {
+  
+      session5.close(() => {
+      });
+    });
+         }
+    else{
+        session6
+        .run(
+          ` MATCH (p1:Person{idm:$id})-[:Follows]->(p2:Person)-[:Wrote]->(p3:Post)-[:Belongs_to]->(c:Category)  RETURN p3.pidm ,p3.title` ,
+            {
+            id:userid
+      
+          }
+        )
+        .then(result => {
+          console.log(result)
+          const data2 =[];
+          result.records.forEach(record => {
+              data.push({
+                  id: record._fields[0],
+                  title: record._fields[1],
+                  
+                  
+              })
+          })
+          console.log(data2)
+          res.send(data2).status(200)
+        })
+        .catch(error => {
+          res.send(error)
+        })
+        .then(() => {
+      
+          session6.close(() => {
+            console.log(` Followed`);
+          });
+        });
+    }
+  
+      
+    })
+    .catch(error => {
+      res.send(error)
+    })
+    .then(() => {
+  
+      session4.close(() => {
+        console.log(` Followed`);
+      });
+    });
+//   const page = parseInt(req.query.page) || 1;
+//   const pageSize = 5;
+//   const pager = paginate(posta.length, page, pageSize);
+//   const pageOfItems = posta.slice(pager.startIndex, pager.endIndex + 1);
+//   res.status(200).send({ pager, pageOfItems });
 };
 
 // Post when submitted mai data would be captured in mongo
@@ -45,7 +153,7 @@ exports.submitPost = async (req, res) => {
   const id1 = post.id;
   const writeTxPromise = session.writeTransaction((tx) =>
     tx.run(
-      "MATCH ( a:Person { name: $username }) MERGE ( b: Post { title:$title, likes: 0, idm: $id1, comment: 0}) MERGE (a)-[: Wrote {created_at: TIMESTAMP()}]->(b)",
+      "MATCH ( a:Person { name: $username }) MERGE ( b: Post { title:$title, likes: 0, pidm: $id1, comment: 0}) MERGE (a)-[: Wrote {created_at: TIMESTAMP()}]->(b)",
       { username: username, id1: id1, title: title }
     )
   );
@@ -162,7 +270,7 @@ exports.searchpost=(req,res) => {
     session
     .run(
         ` MATCH (p:Person)
-        WHERE p.idm= $id
+        WHERE p.pidm= $id
         MATCH (p)-[:Wrote]->(posts)
         WITH collect(posts.pidm) AS myposts
         WITH "(" + apoc.text.join( myposts, " AND " ) + ")^3" AS queryPart 
@@ -172,7 +280,6 @@ exports.searchpost=(req,res) => {
       {
         id:id,
         keyword: kkeyword
-  
       }
     )
     .then(result => {

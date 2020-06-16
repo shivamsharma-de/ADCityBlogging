@@ -46,10 +46,11 @@ class Posts extends React.Component {
 
 	loadPage() {
 		// get page of items from api
+		const loggeduser = JSON.parse(localStorage.getItem('user'));
 		const params = new URLSearchParams(window.location.search);
 		const page = parseInt(params.get("page")) || 1;
 		if (page !== this.state.pager.currentPage) {
-			fetch(`http://localhost:5000/api/test/posts?page=${page}`, {
+			fetch(`http://localhost:5000/api/test/posts/${loggeduser.id}?page=${page}`, {
 				method: "GET",
 			})
 				.then((response) => response.json())

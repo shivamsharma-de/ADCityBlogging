@@ -80,7 +80,7 @@ var bcrypt = require("bcryptjs");
   console.log(fullname)
 
   await session
-    .run("CREATE (n:Person {name: $username, idm:$idm, fullname:$fullname})", {
+    .run("CREATE (n:Person {name: $username, pidm:$idm, fullname:$fullname})", {
       username: req.body.username,
 	  idm: idm,
 	  fullname: fullname

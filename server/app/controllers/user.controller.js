@@ -108,17 +108,16 @@ exports.searchuser=(req,res) => {
 session
   .run(
     ` MATCH (p:Person)
-    WHERE p.idm= $id
+    WHERE p.pidm= $id
     MATCH (p)-[:Follows]->(following)
     WITH collect(following.idm) AS myposts
     WITH "(" + apoc.text.join( myposts, " AND " ) + ")^3" AS queryPart 
-    CALL db.index.fulltext.queryNodes('findperson', 'fullname: ${kkeyword}  idm: ' + queryPart)
+    CALL db.index.fulltext.queryNodes('persons', 'fullname: ${kkeyword}  idm: ' + queryPart)
     YIELD node, score 
-    RETURN node.idm, node.fullname,  score ` ,
+    RETURN node.pidm, node.fullname,  score ` ,
       {
       id:userid,
       kkeyword: kkeyword
-
     }
   )
   .then(result => {
@@ -135,7 +134,7 @@ session
     res.send(data).status(200)
   })
   .catch(error => {
-    res.send(error)
+    console.log(error)
   })
   .then(() => {
 

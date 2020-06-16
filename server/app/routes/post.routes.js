@@ -22,7 +22,7 @@ module.exports = function(app) {
  * 
  */
    
-    app.get("/api/test/postsss", isLoggedin, controller.getPost);
+    app.get("/api/test/posts/:id",  controller.getPost);
 
 /**
  * @swagger
