@@ -27,10 +27,10 @@ exports.submitPost = async (req, res) => {
   const session2 = driver.session();
   user = req.params;
   id = user.id;
-  const { title, content, category } = req.body;
+  const { title, content, selectedCgt } = req.body;
   const userById = await User.findById(id);
   const username = userById.username;
-
+    console.log(selectedCgt)
   const post = await Post({
     title: title,
     content: content,
@@ -45,7 +45,7 @@ exports.submitPost = async (req, res) => {
   const id1 = post.id;
   const writeTxPromise = session.writeTransaction((tx) =>
     tx.run(
-      "MATCH ( a:Person { name: $username }) MERGE ( b: Post { name:$title, likes: 0, idm: $id1, comment: 0}) MERGE (a)-[: Wrote {created_at: TIMESTAMP()}]->(b)",
+      "MATCH ( a:Person { name: $username }) MERGE ( b: Post { title:$title, likes: 0, idm: $id1, comment: 0}) MERGE (a)-[: Wrote {created_at: TIMESTAMP()}]->(b)",
       { username: username, id1: id1, title: title }
     )
   );
@@ -53,10 +53,10 @@ exports.submitPost = async (req, res) => {
     console.log("in the write");
     const write1TxPromise = session.writeTransaction((tx) =>
       tx.run(
-        " MATCH (a:Post {idm: $id1}),(b:Category{name : $category}) CREATE (a)-[: Belongs_to ]->(b)",
+        " MATCH (a:Post {idm: $id1}),(b:Category{name : $selectedCgt}) CREATE (a)-[: Belongs_to ]->(b)",
         {
           id1: id1,
-          category: category,
+          selectedCgt: selectedCgt,
         }
       )
     );
@@ -157,20 +157,20 @@ exports.getcomments = async (req, res) => {
 };
 exports.searchpost=(req,res) => {
     const session = driver.session();
-    const userid = req.params.id
-    const kkeyword = req.body.keyword
+    const id = req.params.id
+    const kkeyword = req.params.q
     session
     .run(
         ` MATCH (p:Person)
         WHERE p.idm= $id
-        MATCH (p)-[:Wrote]->(post)
-        WITH collect(post.pidm) AS myposts
-        WITH "(" + apoc.text.join( myposts, " OR " ) + ")^3" AS queryPart 
-        CALL db.index.fulltext.queryNodes('posts', 'title: ${kkeyword}  p.idm: ' + queryPart)
+        MATCH (p)-[:Wrote]->(posts)
+        WITH collect(posts.pidm) AS myposts
+        WITH "(" + apoc.text.join( myposts, " AND " ) + ")^3" AS queryPart 
+        CALL db.index.fulltext.queryNodes('posts', 'title: ${kkeyword}  pidm: ' + queryPart)
         YIELD node, score 
-        RETURN node, score ` ,
+        RETURN node.pidm, node.title, score ` ,
       {
-        id:userid,
+        id:id,
         keyword: kkeyword
   
       }
@@ -180,8 +180,9 @@ exports.searchpost=(req,res) => {
       const post =[];
       result.records.forEach(record => {
           post.push({
-              node: record._fields[0].properties,
-              score: record._fields[1]
+            id: record._fields[0],
+            title: record._fields[1],
+            score: record._fields[2]
           })
       })
   

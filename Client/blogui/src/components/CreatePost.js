@@ -21,7 +21,7 @@ const required = (value) => {
 export class Createpost extends Component {
 	constructor(props) {
 		super(props);
-
+		this.onChangeCgt = this.onChangeCgt.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.onChangeTitle = this.onChangeTitle.bind(this);
 		this.onChangeContent = this.onChangeContent.bind(this);
@@ -70,7 +70,7 @@ export class Createpost extends Component {
       alert('Select a category!')
     } else {
       if (this.checkBtn.context._errors.length === 0) {
-        PostService.createpost(this.state.title, this.state.content).then(
+        PostService.createpost(this.state.title, this.state.content, this.state.selectedCgt).then(
           (response) => {
             this.setState({
               message: response.data.message,
@@ -97,12 +97,12 @@ export class Createpost extends Component {
     }
 	}
 
-	onChangeCgt = (event) => {
+	onChangeCgt (e)  {
 		this.setState({
-			selectedCgt: event.target.value,
+			selectedCgt: e.target.value,
 		});
     
-    console.log(event.target.value);
+    console.log(e.target.value);
 	};
 
 	render() {
@@ -163,7 +163,7 @@ export class Createpost extends Component {
 											<option value='Acomodation' name='Acomodation'>
 												Accomodation
 											</option>
-											<option value='City Office' name='City Office'>
+											<option value='City_Office' name='City Office'>
 												City Office
 											</option>
 										</select>
