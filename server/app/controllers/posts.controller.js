@@ -31,7 +31,7 @@ exports.getPost = async (req, res) => {
       });
       c = data3[0].length;
 
-      if (c == 1) {
+      if (c <= 1) {
         session5
           .run(
             ` MATCH (p1:Person{pidm:$id})-[:Have_interests_in]->(c:Category)<-[:Belongs_to]-(p3:Post) RETURN p3.title, p3.pidm `,
@@ -66,7 +66,10 @@ exports.getPost = async (req, res) => {
       } else {
         session6
           .run(
-            ` MATCH (p1:Person{pidm:$id})-[:Follows]->(p2:Person)-[:Wrote]->(p3:Post)-[:Belongs_to]->(c:Category)  RETURN p3.pidm ,p3.title`,
+            `MATCH (p:Person)
+            WHERE p.pidm= $id
+            MATCH (p)-[:Follows]->(p2) 
+             MATCH (p2)-[:Wrote]->(p3:Post)  RETURN p3.pidm ,p3.title`,
             {
               id: userid,
             }
@@ -75,10 +78,12 @@ exports.getPost = async (req, res) => {
             const data2 = [];
             result.records.forEach((record) => {
               data2.push({
-                id: record._fields[0],
+             
                 title: record._fields[1],
+                id: record._fields[0],
               });
             });
+            console.log("inhere")
             const page = parseInt(req.query.page) || 1;
             const pageSize = 5;
             const pager = paginate(data2.length, page, pageSize);

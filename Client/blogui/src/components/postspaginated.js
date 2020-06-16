@@ -7,8 +7,10 @@ import Footer from "./Footer";
 import CommentsModel from "./CommentsModel";
 import Moment from "react-moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
 	faThumbsUp,
+	faComments,
 	faThumbsDown,
 	faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -72,48 +74,26 @@ class Posts extends React.Component {
 					<div className='row'>
 						<div className='col-lg-8'>
 							{pageOfItems.map((post) => (
-								<div key={post._id} className=' col-lg-12'>
-									<div className='card text-center border-secondary card-style'>
-										<Link to={`/singleposts/${post._id}`}>
-											<div className='card-header text-white bg-secondary'>
-												<h5 className='card-title'>{post.title}</h5>
-											</div>
-										</Link>
+								<div key={post.id} className=' col-lg-12'>
+				 
+                  
+				  <div className="list-group mrgn">
+					<span href="#" className="list-group-item list-group-item-action flex-column align-items-start">
+					  <div className="d-flex w-100 justify-content-between">
+					  
+					  <Link to={`/singleposts/${post.id}`}><h5 className="mb-1">{post.title}</h5></Link>
+			 
+					  
+					  </div>
+					  
+					  <p className="mb-1">The post <span className="font-weight-bold"></span> exists in this blog. Click on post title to check it out.</p>
+					 
+					  <FontAwesomeIcon color="orange" className="float-right" icon={faComments}/>
+					</span>
+				  </div>
+  
+			   </div>
 
-										<div className='card-body'>
-											<p className='card-text'>{post.content}</p>
-										</div>
-										<div className='card-footer d-flex justify-content-between'>
-											<span>
-												<FontAwesomeIcon
-													className='mr-3'
-													icon={faThumbsUp}
-													style={{ cursor: "pointer" }}
-													color='red'
-												/>
-												<FontAwesomeIcon
-													icon={faThumbsDown}
-													color='red'
-													style={{ cursor: "pointer" }}
-												/>
-											</span>
-											<p className='text-success'>
-												{" "}
-												<Moment fromNow>{post.date}</Moment>
-											</p>
-
-											<Link to={`/userprofile/${post.user}`}>
-												<span>
-													<FontAwesomeIcon className='mr-1' icon={faUser} />
-													{post.author}
-												</span>
-											</Link>
-                      <span>
-                        <CommentsModel/>
-                      </span>
-										</div>
-									</div>
-								</div>
 							))}
 						</div>
 
