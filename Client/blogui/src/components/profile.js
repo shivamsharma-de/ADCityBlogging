@@ -160,7 +160,8 @@ export default class Profile extends Component {
               <div className="p-3">
                 <div class="form-group">
                   <div class="row">
-                    <div class="col">
+                    <div class="col-12">
+                    <label for="exampleInputEmail1">First name</label>
                       <input
                         type="text"
                         disabled
@@ -168,7 +169,8 @@ export default class Profile extends Component {
                         placeholder={currentUser.firstname}
                       />
                     </div>
-                    <div class="col">
+                    <div class="col-12 mt-2 mb-2">
+                    <label for="exampleInputEmail1">Last name</label>
                       <input
                         type="text"
                         disabled

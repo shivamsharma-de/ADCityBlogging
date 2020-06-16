@@ -54,12 +54,12 @@ class Sidebar extends Component {
 						</div>
 						<div className='input-group-btn d-flex justify-content-around py-3'>
 							<Link to={`/search/?q=${this.state.query}`}>
-								<button className='btn btn-primary' type='button'>
+								<button className='btn btn-outline-primary' type='button'>
 									Search in Posts
 								</button>
 							</Link>
 							<Link to={`/searchuser/?q=${this.state.query}`}>
-								<button className='btn btn-success' type='button'>
+								<button className='btn btn-outline-success' type='button'>
 									Search in Users
 								</button>
 							</Link>
