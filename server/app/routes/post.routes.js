@@ -81,7 +81,7 @@ module.exports = function(app) {
  * 
  */
     app.get(
-        "/api/test/posts/:id", controller.specificPost
+        "/api/test/specificposts/:id", controller.specificPost
   
       );
   
