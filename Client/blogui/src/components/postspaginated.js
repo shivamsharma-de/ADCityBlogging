@@ -4,15 +4,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
-import CommentsModel from "./CommentsModel";
-import Moment from "react-moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
 	faThumbsUp,
 	faComments,
-	faThumbsDown,
-	faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
 import Sidebar from "./sidebar";
@@ -87,7 +83,7 @@ class Posts extends React.Component {
 					  </div>
 					  
 					  <p className="mb-1">The post <span className="font-weight-bold"></span> exists in this blog. Click on post title to check it out.</p>
-					 
+					  <FontAwesomeIcon color="lime" className="float-left" icon={faThumbsUp}/>
 					  <FontAwesomeIcon color="orange" className="float-right" icon={faComments}/>
 					</span>
 				  </div>

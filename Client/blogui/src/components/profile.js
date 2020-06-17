@@ -87,7 +87,7 @@ export default class Profile extends Component {
         currentUser: AuthService.getCurrentUser(),
     
       });
-    }
+    } 
   }
   handleUpdate(e){
     e.preventDefault();
