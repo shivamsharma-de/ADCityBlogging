@@ -77,7 +77,6 @@ exports.getPost = async (req, res) => {
             const data2 = [];
             result.records.forEach((record) => {
               data2.push({
-             
                 title: record._fields[1],
                 id: record._fields[0],
               });
@@ -111,7 +110,7 @@ exports.getPost = async (req, res) => {
     });
 };
 
-// Post when submitted mai data would be captured in mongo
+// Post when submitted  data would be captured in mongo
 //while realtionship to categories and posts will be sent to Neo4j.
 exports.submitPost = async (req, res) => {
   const session = driver.session();

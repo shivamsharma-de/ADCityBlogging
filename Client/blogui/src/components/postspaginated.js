@@ -69,6 +69,8 @@ class Posts extends React.Component {
 				<div className='container mrgn'>
 					<div className='row'>
 						<div className='col-lg-8'>
+							<h2>Your Feed</h2>
+							<hr/>
 							{pageOfItems.map((post) => (
 								<div key={post.id} className=' col-lg-12'>
 				 
