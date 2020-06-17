@@ -17,7 +17,9 @@ class UserService {
   }
 
   getAdminBoard() {
-    return axios.get(API_URL + 'admin', { headers: authHeader() });
+    const loggeduser = JSON.parse(localStorage.getItem('user'));
+    console.log(loggeduser.id)
+    return axios.get(API_URL + `admin/${loggeduser.id}`);
   }
 }
 

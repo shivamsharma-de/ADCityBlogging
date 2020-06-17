@@ -26,8 +26,8 @@ module.exports = function (app) {
   );
 
   app.get(
-    "/api/test/admin",
-    [authJwt.authenticate, authJwt.isAdmin],
+    "/api/test/admin/:id",
+    [ authJwt.isAdmin],
     controller.adminBoard
   );
   app.get(

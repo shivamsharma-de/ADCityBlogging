@@ -63,7 +63,7 @@ export class Searchpageuser extends Component {
                   <span href="#" className="list-group-item list-group-item-action flex-column align-items-start">
                     <div className="d-flex w-100 justify-content-between">
                     
-                    <Link to={`/singleposts/${post.id}`}><h5 className="mb-1">{post.name}</h5></Link>
+                    <Link to={`/userprofile/${post.id}`}><h5 className="mb-1">{post.name}</h5></Link>
            
                     
                     </div>

@@ -93,10 +93,10 @@ exports.follow = async (req, res) => {
   const id2 = req.params.id2;
   session
     .run(
-      "MATCH (a:Person), (b:Person) WHERE a.pidm = $username1 AND b.pidm =  $username2 MERGE (a)-[: Follows {created_at: TIMESTAMP()}]->(b) ",
+      "MATCH (a:Person), (b:Person) WHERE a.pidm = $id1 AND b.pidm =  $id2 MERGE (a)-[: Follows {created_at: TIMESTAMP()}]->(b) ",
       {
-        pidm: id1,
-        pidm2: id2,
+        id1: id1,
+        id2: id2,
       }
     )
     .then(() => {

@@ -81,6 +81,7 @@ exports.getPost = async (req, res) => {
                 id: record._fields[0],
               });
             });
+            console.log("inhere");
             const page = parseInt(req.query.page) || 1;
             const pageSize = 5;
             const pager = paginate(data2.length, page, pageSize);
