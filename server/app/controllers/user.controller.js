@@ -1,7 +1,7 @@
 const User = require("../models/user.model");
 const driver = require("../config/neo4j.coinfig");
 
-const paginate = require('jw-paginate');
+const paginate = require("jw-paginate");
 
 exports.find = async (req, res) => {
   const user = await User.find();
@@ -22,35 +22,35 @@ exports.specificUser = async (req, res) => {
     website: specificUser.website,
   });
 };
-exports.follow = async (req, res) =>{
+exports.follow = async (req, res) => {
   const session = driver.session();
-  const u  = req.params;
-  const id1 = u.id
-  const id2  = req.body.id2;
-  
-  const user1 =  await User.findById(id1);
-  const user2 =  await User.findById(id2);
+  const u = req.params;
+  const id1 = u.id;
+  const id2 = req.params.id2;
+
+  const user1 = await User.findById(id1);
+  const user2 = await User.findById(id2);
   const username1 = user1.username;
-  
-  const username2 =  user2.username;
-  console.log(username1,username2)
+
+  const username2 = user2.username;
+  console.log(username1, username2);
 
   session
-  .run(
-    "MATCH (a:Person), (b:Person) WHERE a.name = $username1 AND b.name =  $username2 MERGE (a)-[: Follows {created_at: TIMESTAMP()}]->(b) ",
-    {
-      username1: username1,
-      username2: username2,
-    }
-  )
-  .then(() => {
-
-    session.close(() => {
-      console.log(` Followed`);
+    .run(
+      "MATCH (a:Person), (b:Person) WHERE a.name = $username1 AND b.name =  $username2 MERGE (a)-[: Follows {created_at: TIMESTAMP()}]->(b) ",
+      {
+        username1: username1,
+        username2: username2,
+      }
+    )
+    .then(() => {
+      session.close(() => {
+        console.log(` Followed`);
+      });
     });
-  });
-res.status(200).send(`$username1 followed $username2`)
-}
+  res.status(200).send(`$username1 followed $username2`);
+};
+
 exports.postsByUser = async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id).populate("posts");
@@ -80,72 +80,65 @@ exports.allAccess = (req, res) => {
 
 exports.userBoard = (req, res) => {
   res.status(200).send("User Content.");
-}
-
+};
 
 exports.adminBoard = async (req, res) => {
-  const users =  await User.find( {},
-    
-    {username:1,
-    email:1,
-    firstname:1,
-    lastname:1,
-  active:1})
-   
+  const users = await User.find(
+    {},
+
+    { username: 1, email: 1, firstname: 1, lastname: 1, active: 1 }
+  );
 
   res.status(200).send({ users });
 };
 
 exports.moderatorBoard = (req, res) => {
   res.status(200).send("Moderator Content.");
-}
+};
 
-exports.searchuser=(req,res) => {
+exports.searchuser = (req, res) => {
   const session = driver.session();
-  const userid = req.params.id
-  const kkeyword = req.params.q
+  const userid = req.params.id;
+  const kkeyword = req.params.q;
 
-session
-  .run(
-    ` MATCH (p:Person)
+  session
+    .run(
+      ` MATCH (p:Person)
     WHERE p.pidm= $id
     MATCH (p)-[:Follows]->(following)
     WITH collect(following.idm) AS myposts
     WITH "(" + apoc.text.join( myposts, " AND " ) + ")^3" AS queryPart 
     CALL db.index.fulltext.queryNodes('persons', 'fullname: ${kkeyword}  idm: ' + queryPart)
     YIELD node, score 
-    RETURN node.pidm, node.fullname,  score ` ,
+    RETURN node.pidm, node.fullname,  score `,
       {
-      id:userid,
-      kkeyword: kkeyword
-    }
-  )
-  .then(result => {
-    console.log(result)
-    const data =[];
-    result.records.forEach(record => {
+        id: userid,
+        kkeyword: kkeyword,
+      }
+    )
+    .then((result) => {
+      console.log(result);
+      const data = [];
+      result.records.forEach((record) => {
         data.push({
-            id: record._fields[0],
-            name: record._fields[1],
-            score: record._fields[2]
-        })
+          id: record._fields[0],
+          name: record._fields[1],
+          score: record._fields[2],
+        });
+      });
+
+      res.send(data).status(200);
     })
-
-    res.send(data).status(200)
-  })
-  .catch(error => {
-    console.log(error)
-  })
-  .then(() => {
-
-    session.close(() => {
-      console.log(` Followed`);
+    .catch((error) => {
+      console.log(error);
+    })
+    .then(() => {
+      session.close(() => {
+      });
     });
-  });
-}
+};
 
 //posts
 // ` MATCH (p:Person) WHERE p.fullname = "Donald Trump" MATCH (p)-[:Wrote]->(post) WITH collect(post.pidm) AS myposts WITH "(" + apoc.text.join(myposts , " OR ") + ")^2" AS str CALL db.index.fulltext.queryNodes('searchposts', 'title: visa pidm: ' + str) YIELD node, score RETURN node.pidm, node.title, score`
- // users
- //     ` MATCH (p:Person {fullname: 'Dinesh Chugtai'})-[:Follows]->(following) WITH "(" + apoc.text.join( collect(following.idm), ' OR ') + ")^2" AS queryPart CALL db.index.fulltext.queryNodes('findperson', 'fullname: monica idm: ' + queryPart) YIELD node, score RETURN node.idm, node.fullname, score`,
-
+// users
+//     ` MATCH (p:Person {fullname: 'Dinesh Chugtai'})-[:Follows]->(following) WITH "(" + apoc.text.join( collect(following.idm), ' OR ') + ")^2" AS queryPart CALL db.index.fulltext.queryNodes('findperson', 'fullname: monica idm: ' + queryPart) YIELD node, score RETURN node.idm, node.fullname, score`,

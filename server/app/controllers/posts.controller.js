@@ -47,7 +47,6 @@ exports.getPost = async (req, res) => {
                 id: record._fields[1],
               });
             });
-            console.log("here");
             const page = parseInt(req.query.page) || 1;
             const pageSize = 5;
             const pager = paginate(data1.length, page, pageSize);
@@ -226,7 +225,7 @@ exports.getcomments = async (req, res) => {
 
   await session
     .run(
-      " MATCH (x:Post) <-[r:Did_activity_on]- (p:Person) WHERE x.idm=$postid RETURN r.comment AS comment , p.idm AS userid",
+      " MATCH (x:Post) <-[r:Did_activity_on]- (p:Person) WHERE x.pidm=$postid RETURN r.comment AS comment , p.pidm AS userid",
       {
         postid: postid,
       }
@@ -259,7 +258,7 @@ exports.searchpost = (req, res) => {
         MATCH (p)-[:Wrote]->(posts)
         WITH collect(posts.pidm) AS myposts
         WITH "(" + apoc.text.join( myposts, " AND " ) + ")^3" AS queryPart 
-        CALL db.index.fulltext.queryNodes('posts', 'title: ${kkeyword}  pidm: ' + queryPart)
+        CALL db.index.fulltext.queryNodes('myposts', 'title: ${kkeyword}  pidm: ' + queryPart)
         YIELD node, score 
         RETURN node.pidm, node.title, score `,
       {
