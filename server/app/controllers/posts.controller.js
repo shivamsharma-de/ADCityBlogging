@@ -254,10 +254,10 @@ exports.searchpost = (req, res) => {
   session
     .run(
       ` MATCH (p:Person)
-        WHERE p.pidm= $id
-        MATCH (p)-[:Wrote]->(posts)
-        WITH collect(posts.pidm) AS myposts
-        WITH "(" + apoc.text.join( myposts, " AND " ) + ")^3" AS queryPart 
+        WHERE p.pidm= "${id}"
+        MATCH (p)-[:Wrote]->(post)
+        WITH collect(post.pidm) AS mypost
+        WITH "(" + apoc.text.join( mypost, " OR " ) + ")^3" AS queryPart 
         CALL db.index.fulltext.queryNodes('myposts', 'title: ${kkeyword}  pidm: ' + queryPart)
         YIELD node, score 
         RETURN node.pidm, node.title, score `,

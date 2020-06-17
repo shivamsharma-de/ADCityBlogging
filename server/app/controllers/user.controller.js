@@ -50,6 +50,27 @@ exports.follow = async (req, res) => {
     });
   res.status(200).send(`$username1 followed $username2`);
 };
+exports.unfollow = async (req, res) => {
+  const session = driver.session();
+  const u = req.params;
+  const id1 = u.id;
+  const id2 = req.params.id2;
+
+  session
+    .run(
+      "MATCH (a:Person)-[r: Follows]->(b:Person) WHERE a.pidm = $id1 AND b.pidm = $id2 DELETE r ",
+      {
+        id1: id1,
+        id2: id2,
+      }
+    )
+    .then(() => {
+      session.close(() => {
+        console.log(` Unfollowed`);
+      });
+    });
+  res.status(200).send(`${id1} unfollowed ${id2}`);
+};
 
 exports.postsByUser = async (req, res) => {
   const { id } = req.params;
@@ -106,9 +127,9 @@ exports.searchuser = (req, res) => {
       ` MATCH (p:Person)
     WHERE p.pidm= $id
     MATCH (p)-[:Follows]->(following)
-    WITH collect(following.idm) AS myposts
-    WITH "(" + apoc.text.join( myposts, " AND " ) + ")^3" AS queryPart 
-    CALL db.index.fulltext.queryNodes('persons', 'fullname: ${kkeyword}  idm: ' + queryPart)
+    WITH collect(following.pidm) AS followers
+    WITH "(" + apoc.text.join( followers, " OR " ) + ")^3" AS queryPart 
+    CALL db.index.fulltext.queryNodes('persons', 'fullname: ${kkeyword}  pidm: ' + queryPart)
     YIELD node, score 
     RETURN node.pidm, node.fullname,  score `,
       {
