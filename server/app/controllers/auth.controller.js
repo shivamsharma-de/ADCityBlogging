@@ -96,7 +96,7 @@ exports.signup = async (req, res) => {
     console.log(categoryName);
     const username = req.body.username;
     await session2.run(
-      "MATCH (a:Person), (b:Category) WHERE a.idm = $idm AND b.name =  $categoryName CREATE (a)-[: Have_interests_in {created_at: TIMESTAMP()}]->(b) ",
+      "MATCH (a:Person), (b:Category) WHERE a.pidm = $idm AND b.name =  $categoryName CREATE (a)-[: Have_interests_in {created_at: TIMESTAMP()}]->(b) ",
       {
         categoryName: categoryName,
         idm: idm,
