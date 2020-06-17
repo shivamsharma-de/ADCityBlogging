@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import queryString from 'query-string'
 import { Link } from "react-router-dom";
-import Moment from "react-moment";
 import Sidebar from "./sidebar";
 import Header from "./Header";
 import Footer from "./Footer";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faThumbsUp, faComments, faUser} from '@fortawesome/free-solid-svg-icons'
+import { faComments} from '@fortawesome/free-solid-svg-icons'
 import './card.css'
 
 

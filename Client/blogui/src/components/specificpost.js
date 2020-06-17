@@ -250,7 +250,7 @@ handledelete(e){
             <div class="col-lg-8">
               <h1 class="mt-4">{post.title}</h1>
               <p class="lead">
-              by
+                by
                 <Link to={`/userprofile/${post.user}`}> <p>{post.author}</p>
                 </Link>
               </p>

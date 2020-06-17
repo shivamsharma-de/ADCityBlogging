@@ -29,7 +29,6 @@ class Sidebar extends Component {
 		}
 	  }
 	render() {
-		const { currentUser } = this.state;
 		return (
 			<div>
 				<div className='card'>
