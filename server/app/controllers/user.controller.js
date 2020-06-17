@@ -11,16 +11,80 @@ exports.specificUser = async (req, res) => {
   user = req.params;
   id = user.id;
   const specificUser = await User.findById(id);
-  res.status(200).send({
-    id: specificUser.id,
-    firstname: specificUser.firstname,
-    lastname: specificUser.lastname,
-    username: specificUser.username,
-    email: specificUser.email,
-    aboutme: specificUser.aboutme,
-    city: specificUser.city,
-    website: specificUser.website,
-  });
+  const session4 = driver.session();
+  const pidm = id;
+
+  session4
+    .run(
+      `MATCH (p1:Person)
+      WHERE p1.pidm= "${pidm}"
+      MATCH (p1:Person)<-[:Follows]-(p3:Person)
+      RETURN  p3.pidm  , p3.fullname `,
+      {
+        pidm: pidm,
+      }
+    )
+    .then((result) => {
+      const followers = [];
+      result.records.forEach((record) => {
+        followers.push({
+          id: record._fields[0],
+          fullname: record._fields[1],
+        });
+      });
+      follower = followers;
+    })
+
+    .catch((error) => {
+      console.log(error);
+    })
+    .then(() => {
+      session4.close(() => {});
+      const session5 = driver.session();
+
+      session5
+        .run(
+          `MATCH (p1:Person)
+      WHERE p1.pidm= "${pidm}"
+      MATCH (p1:Person)-[:Follows]->(p3:Person)
+      RETURN  p3.pidm  , p3.fullname `,
+          {
+            pidm: pidm,
+          }
+        )
+        .then((result) => {
+          const followings = [];
+          result.records.forEach((record) => {
+            followings.push({
+              id: record._fields[0],
+              fullname: record._fields[1],
+            });
+          });
+          following = followings;
+          res.status(200).send({
+            id: user._id,
+            firstname: specificUser.firstname,
+            lastname: specificUser.lastname,
+            username: specificUser.username,
+            email: specificUser.email,
+
+            aboutme: specificUser.aboutme,
+            city: specificUser.city,
+            website: specificUser.website,
+
+            follower,
+            following,
+            //accessToken: token
+          });
+        })
+
+        .catch((error) => {
+          console.log(error);
+        })
+        .then(() => {
+          session5.close(() => {});
+        });
+    });
 };
 exports.follow = async (req, res) => {
   const session = driver.session();
@@ -154,8 +218,7 @@ exports.searchuser = (req, res) => {
       console.log(error);
     })
     .then(() => {
-      session.close(() => {
-      });
+      session.close(() => {});
     });
 };
 

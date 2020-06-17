@@ -148,9 +148,6 @@ exports.activateuser = async (req, res) => {
   res.send("Activate");
 };
 exports.signin = async (req, res) => {
-  
-
-
   User.findOne({
     username: req.body.username,
   })
@@ -195,11 +192,11 @@ exports.signin = async (req, res) => {
         authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
       }
 
-
       const session4 = driver.session();
       const pidm = user._id;
- 
-      session4 .run(
+
+      session4
+        .run(
           `MATCH (p1:Person)
           WHERE p1.pidm= "${pidm}"
           MATCH (p1:Person)<-[:Follows]-(p3:Person)
@@ -209,100 +206,66 @@ exports.signin = async (req, res) => {
           }
         )
         .then((result) => {
-         
           const followers = [];
           result.records.forEach((record) => {
             followers.push({
               id: record._fields[0],
               fullname: record._fields[1],
             });
-         
           });
-          // const following = []
-          // result.records.forEach((record) => {
-          //   following.push({
-          //     id: record._fields[2],
-          //     fullname: record._fields[3],
-          //   });
-         
-          // });
-          follower = followers
+          follower = followers;
         })
-     
+
         .catch((error) => {
           console.log(error);
         })
         .then(() => {
-          session4.close(() => {
-          });
+          session4.close(() => {});
           const session5 = driver.session();
- 
- 
-      session5 .run(
-          `MATCH (p1:Person)
+
+          session5
+            .run(
+              `MATCH (p1:Person)
           WHERE p1.pidm= "${pidm}"
           MATCH (p1:Person)-[:Follows]->(p3:Person)
           RETURN  p3.pidm  , p3.fullname `,
-          {
-            pidm: pidm,
-          }
-        )
-        .then((result) => {
-         
-          const followings = [];
-          result.records.forEach((record) => {
-            followings.push({
-              id: record._fields[0],
-              fullname: record._fields[1],
+              {
+                pidm: pidm,
+              }
+            )
+            .then((result) => {
+              const followings = [];
+              result.records.forEach((record) => {
+                followings.push({
+                  id: record._fields[0],
+                  fullname: record._fields[1],
+                });
+              });
+              following = followings;
+              res.status(200).send({
+                id: user._id,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                username: user.username,
+                email: user.email,
+                roles: authorities,
+                aboutme: user.aboutme,
+                city: user.city,
+                website: user.website,
+                posts: user.posts,
+                follower,
+                following,
+                //accessToken: token
+              });
+            })
+
+            .catch((error) => {
+              console.log(error);
+            })
+            .then(() => {
+              session5.close(() => {});
             });
-         
-          });
-          following = followings
-          res.status(200).send(  {
-            id: user._id,
-            firstname: user.firstname,
-            lastname: user.lastname,
-            username: user.username,
-            email: user.email,
-            roles: authorities,
-            aboutme: user.aboutme,
-            city: user.city,
-            website: user.website,
-            posts: user.posts,
-            follower,following
-            //accessToken: token
-          });
-        })
-     
-        .catch((error) => {
-          console.log(error);
-        })
-        .then(() => {
-          session5.close(() => {
-          });
         });
-        });
-      
-        
-      
-
-
-  
-      // res.status(200).send(  {
-      //   id: user._id,
-      //   firstname: user.firstname,
-      //   lastname: user.lastname,
-      //   username: user.username,
-      //   email: user.email,
-      //   roles: authorities,
-      //   aboutme: user.aboutme,
-      //   city: user.city,
-      //   website: user.website,
-      //   posts: user.posts,
-      //   followers1,
-      //   // followings
-      //   //accessToken: token
-      // });
     });
 };
 
