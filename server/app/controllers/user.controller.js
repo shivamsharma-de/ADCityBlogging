@@ -86,25 +86,17 @@ exports.specificUser = async (req, res) => {
         });
     });
 };
+//FOLLOW
 exports.follow = async (req, res) => {
   const session = driver.session();
-  const u = req.params;
-  const id1 = u.id;
+  const id1 = req.params.id;
   const id2 = req.params.id2;
-
-  const user1 = await User.findById(id1);
-  const user2 = await User.findById(id2);
-  const username1 = user1.username;
-
-  const username2 = user2.username;
-  console.log(username1, username2);
-
   session
     .run(
-      "MATCH (a:Person), (b:Person) WHERE a.name = $username1 AND b.name =  $username2 MERGE (a)-[: Follows {created_at: TIMESTAMP()}]->(b) ",
+      "MATCH (a:Person), (b:Person) WHERE a.pidm = $username1 AND b.pidm =  $username2 MERGE (a)-[: Follows {created_at: TIMESTAMP()}]->(b) ",
       {
-        username1: username1,
-        username2: username2,
+        pidm: id1,
+        pidm2: id2,
       }
     )
     .then(() => {
@@ -114,6 +106,7 @@ exports.follow = async (req, res) => {
     });
   res.status(200).send(`$username1 followed $username2`);
 };
+//UNFOLLOW
 exports.unfollow = async (req, res) => {
   const session = driver.session();
   const u = req.params;
@@ -185,7 +178,6 @@ exports.searchuser = (req, res) => {
   const session = driver.session();
   const userid = req.params.id;
   const kkeyword = req.params.q;
-
   session
     .run(
       ` MATCH (p:Person)
