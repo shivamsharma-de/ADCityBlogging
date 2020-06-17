@@ -22,7 +22,7 @@ module.exports = function(app) {
  * 
  */
    
-    app.get("/api/test/posts", isLoggedin, controller.getPost);
+    app.get("/api/test/posts/:id",  controller.getPost);
 
 /**
  * @swagger
@@ -81,7 +81,7 @@ module.exports = function(app) {
  * 
  */
     app.get(
-        "/api/test/posts/:id", controller.specificPost
+        "/api/test/specificposts/:id", controller.specificPost
   
       );
   
@@ -116,10 +116,7 @@ module.exports = function(app) {
  * 
  */
 
-  app.get(
-        "/api/find/:query", controller.searchpost
-  
-      );
+
       app.post(
         "/api/test/comment", controller.createcomment
   
@@ -133,7 +130,7 @@ module.exports = function(app) {
   
       );
       app.post(
-        "/api/test/searchpost/:id", controller.searchpost
+        "/api/test/searchpost/:id/:q", controller.searchpost
   
       );
   };

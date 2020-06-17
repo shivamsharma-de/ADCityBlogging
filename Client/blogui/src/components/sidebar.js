@@ -2,7 +2,7 @@
 
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-
+import AuthService from "../services/auth.service";
 class Sidebar extends Component {
 	constructor(props) {
 		super(props);
@@ -18,7 +18,16 @@ class Sidebar extends Component {
 		});
 	};
 	onHandleGo(e) {}
-
+	componentDidMount() {
+		const user = AuthService.getCurrentUser();
+	
+		if (user) {
+		  this.setState({
+			currentUser: AuthService.getCurrentUser(),
+		
+		  });
+		}
+	  }
 	render() {
 		return (
 			<div>
@@ -44,12 +53,12 @@ class Sidebar extends Component {
 						</div>
 						<div className='input-group-btn d-flex justify-content-around py-3'>
 							<Link to={`/search/?q=${this.state.query}`}>
-								<button className='btn btn-primary' type='button'>
+								<button className='btn btn-outline-primary' type='button'>
 									Search in Posts
 								</button>
 							</Link>
-							<Link to={`/search`}>
-								<button className='btn btn-success' type='button'>
+							<Link to={`/searchuser/?q=${this.state.query}`}>
+								<button className='btn btn-outline-success' type='button'>
 									Search in Users
 								</button>
 							</Link>

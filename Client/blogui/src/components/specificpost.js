@@ -8,7 +8,7 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import axios from 'axios';
-
+import {Link} from 'react-router-dom'
 const required = value => {
   if (!value) {
     return (
@@ -65,7 +65,7 @@ export class SpecificPost extends Component {
   loadPage() {
     const id = this.props.match.params;
     console.log(id);
-    fetch(`http://localhost:5000/api/test/posts/${id.id}`, { method: "GET" })
+    fetch(`http://localhost:5000/api/test/specificposts/${id.id}`, { method: "GET" })
       .then((response) => response.json())
       .then((post) => {
         this.setState(() => ({ post }));
@@ -226,7 +226,7 @@ handledelete(e){
             <h1 class="mt-4">{post.title}</h1>
               <p class="lead">
                 by
-                <p>{post.author}</p>
+                <Link to={`/userprofile/${post.user}`}> <p>{post.author}</p></Link>
               </p>
               <hr />
               <p>
@@ -251,7 +251,8 @@ handledelete(e){
               <h1 class="mt-4">{post.title}</h1>
               <p class="lead">
                 by
-                <p>{post.author}</p>
+                <Link to={`/userprofile/${post.user}`}> <p>{post.author}</p>
+                </Link>
               </p>
               <hr />
               <p>

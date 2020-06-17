@@ -56,8 +56,9 @@ class Admin extends Component {
   loadPage() {
     // get page of items from api
     
-   
-      fetch('http://localhost:5000/api/test/admin/users', { method: "GET", headers: authHeader() })
+    const loggeduser = JSON.parse(localStorage.getItem('user'));
+
+      fetch(`http://localhost:5000/api/test/admin/${loggeduser.id}`, { method: "GET", })
         .then((response) => response.json())
         .then(({ users }) => {
           this.setState(() => ({ users}));
@@ -87,19 +88,19 @@ onactivate(id){
         {
             Header: "User ID",
             accessor: "_id",
-            filterable: true,
+          
             style:{textAlign: "left"}
         },
         {
             Header: "Firstname",
             accessor: "firstname",
-            filterable: true
+            
 
         },
         {
             Header: "Lastname",
             accessor: "lastname",
-            filterable: false
+          
         },
         {
             Header: "Username",
@@ -109,7 +110,7 @@ onactivate(id){
         {
             Header: "Email",
             accessor: "email",
-            filterable: true
+         
         },
         {
            
@@ -117,12 +118,12 @@ onactivate(id){
             accessor: "active",
             // Cell: d => d.active.String(),
             Cell: ({ value }) => String(value),
-            filterable: true
+            
         },
         {
       
         Header: "Disable Account",
-        filterable: false,
+     
         Cell: props => (
             <button
             className="btn btn-danger mr-2"
@@ -138,7 +139,7 @@ onactivate(id){
         },
         {
             Header: "Activate Account",
-            filterable: false,
+            
             Cell: props => (
                 <button
                 className="btn btn-success mr-2"
@@ -159,7 +160,7 @@ onactivate(id){
         </div>
         <ReactTable columns={columns} 
         data = {this.state.users} 
-        filterable
+        
         defaultPageSize={10}
       >
 

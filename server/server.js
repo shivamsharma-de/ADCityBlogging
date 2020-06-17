@@ -17,7 +17,7 @@ const session = require("./app/middlewares/session");
 app.use(cookieParser());
 app.use(session);
 
-//CORS logic
+// CORS logic
 app.options("*", corsMiddleware);
 app.use(corsMiddleware);
 

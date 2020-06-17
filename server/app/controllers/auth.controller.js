@@ -14,7 +14,7 @@ const Role = db.role;
 
 var bcrypt = require("bcryptjs");
 
- exports.signup = async(req, res) => {
+exports.signup = async (req, res) => {
   const user = new User({
     firstname: req.body.firstname,
     lastname: req.body.lastname,
@@ -24,8 +24,6 @@ var bcrypt = require("bcryptjs");
     password: bcrypt.hashSync(req.body.password, 8),
     active: true,
   });
-
-  
 
   user.save((err, user) => {
     if (err) {
@@ -76,14 +74,14 @@ var bcrypt = require("bcryptjs");
   });
   const session = driver.session();
   idm = user.id;
-  const fullname = user.firstname + " " + user.lastname
-  console.log(fullname)
+  const fullname = user.firstname + " " + user.lastname;
+  console.log(fullname);
 
   await session
-    .run("CREATE (n:Person {name: $username, idm:$idm, fullname:$fullname})", {
+    .run("CREATE (n:Person {name: $username, pidm:$idm, fullname:$fullname})", {
       username: req.body.username,
-	  idm: idm,
-	  fullname: fullname
+      idm: idm,
+      fullname: fullname,
     })
     .then(() => {
       session.close(() => {
@@ -92,22 +90,21 @@ var bcrypt = require("bcryptjs");
     });
   const cgt = req.body.cgt;
 
-cgt.forEach(createrel) 
-async function createrel(categoryName){
+  cgt.forEach(createrel);
+  async function createrel(categoryName) {
     const session2 = driver.session();
-   console.log(categoryName)
+    console.log(categoryName);
     const username = req.body.username;
-   await session2
-      .run(
-        "MATCH (a:Person), (b:Category) WHERE a.idm = $idm AND b.name =  $categoryName CREATE (a)-[: Have_interests_in {created_at: TIMESTAMP()}]->(b) ",
-        {
-          categoryName: categoryName,
-          idm: idm,
-        }
-      )
-     
-        await session2.close();
-	}
+    await session2.run(
+      "MATCH (a:Person), (b:Category) WHERE a.pidm = $idm AND b.name =  $categoryName CREATE (a)-[: Have_interests_in {created_at: TIMESTAMP()}]->(b) ",
+      {
+        categoryName: categoryName,
+        idm: idm,
+      }
+    );
+
+    await session2.close();
+  }
 };
 
 // exports.verifyemail = async (req,res) =>{
@@ -150,7 +147,7 @@ exports.activateuser = async (req, res) => {
   );
   res.send("Activate");
 };
-exports.signin = (req, res) => {
+exports.signin = async (req, res) => {
   User.findOne({
     username: req.body.username,
   })
@@ -194,20 +191,81 @@ exports.signin = (req, res) => {
       for (let i = 0; i < user.roles.length; i++) {
         authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
       }
-      res.status(200).send({
-        id: user._id,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        username: user.username,
-        email: user.email,
-        roles: authorities,
-        aboutme: user.aboutme,
-        city: user.city,
-        website: user.website,
-        posts: user.posts,
 
-        //accessToken: token
-      });
+      const session4 = driver.session();
+      const pidm = user._id;
+
+      session4
+        .run(
+          `MATCH (p1:Person)
+          WHERE p1.pidm= "${pidm}"
+          MATCH (p1:Person)<-[:Follows]-(p3:Person)
+          RETURN  p3.pidm  , p3.fullname `,
+          {
+            pidm: pidm,
+          }
+        )
+        .then((result) => {
+          const followers = [];
+          result.records.forEach((record) => {
+            followers.push({
+              id: record._fields[0],
+              fullname: record._fields[1],
+            });
+          });
+          follower = followers;
+        })
+
+        .catch((error) => {
+          console.log(error);
+        })
+        .then(() => {
+          session4.close(() => {});
+          const session5 = driver.session();
+
+          session5
+            .run(
+              `MATCH (p1:Person)
+          WHERE p1.pidm= "${pidm}"
+          MATCH (p1:Person)-[:Follows]->(p3:Person)
+          RETURN  p3.pidm  , p3.fullname `,
+              {
+                pidm: pidm,
+              }
+            )
+            .then((result) => {
+              const followings = [];
+              result.records.forEach((record) => {
+                followings.push({
+                  id: record._fields[0],
+                  fullname: record._fields[1],
+                });
+              });
+              following = followings;
+              res.status(200).send({
+                id: user._id,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                username: user.username,
+                email: user.email,
+                roles: authorities,
+                aboutme: user.aboutme,
+                city: user.city,
+                website: user.website,
+                posts: user.posts,
+                follower,
+                following,
+                //accessToken: token
+              });
+            })
+
+            .catch((error) => {
+              console.log(error);
+            })
+            .then(() => {
+              session5.close(() => {});
+            });
+        });
     });
 };
 

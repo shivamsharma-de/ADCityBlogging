@@ -1,6 +1,7 @@
 /** @format */
 
 import React, { Component } from "react";
+import axios from "axios";
 import Header from "./Header";
 import Footer from "./Footer";
 import Moment from "react-moment";
@@ -14,82 +15,24 @@ import {
 	faComments,
 } from "@fortawesome/free-solid-svg-icons";
 
-const follower = [
-	{
-		username: "Adams",
-		Userid: "5ecf8wewe4df1a3ea800133bd67f",
-	},
-	{
-		username: "Ray",
-		Userid: "5edd3dss3e4387f2179018fb716",
-	},
-	{
-		username: "Horang",
-		Userid: "5edd3d321ss3e4387f2179018fb716",
-	},
-	{
-		username: "Franklin",
-		Userid: "5edd3ds093s3e4387f2179018fb716",
-	},
-	{
-		username: "Paul",
-		Userid: "5edd3dss3e4387f2179014348fb716",
-	},
-	{
-		username: "Angel",
-		Userid: "5edd3ds4322s3e4387f2179018fb716",
-	},
-];
-const following = [
-	{
-		username: "Jhon",
-		Userid: "5ecf8wewe4df1a3ea800133bd67f",
-	},
-	{
-		username: "Alex",
-		Userid: "5edd3dss3e4387f2179018fb716",
-	},
-	{
-		username: "Jane",
-		Userid: "5edd3d321ss3e4387f2179018fb716",
-	},
-	{
-		username: "Jane",
-		Userid: "5edd3d321ss3e4387f2179018fb716",
-	},
-	{
-		username: "Marry",
-		Userid: "5edd3ds093s3e4387f2179018fb716",
-	},
-	{
-		username: "Chang",
-		Userid: "5edd3dss3e4387f2179014348fb716",
-	},
-	{
-		username: "Angel",
-		Userid: "5edd3ds4322s3e4387f2179018fb716",
-	},
-];
-
 const styleFooter = {
 	position: "absolute",
 	width: "100%",
 };
 
 export class Userprofile extends Component {
-
-	
-
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			posts: [],
 			user: {},
-			isfollowing: true,
+			isfollowing: false,
 			redirectToUser: null,
-			
-			
+			following: [],
+			follower: [],
+			firstname: "",
+			lastname: "",
 		};
 	}
 	componentDidMount() {
@@ -103,7 +46,43 @@ export class Userprofile extends Component {
 			redirectToUser: event.target.value,
 		});
 	};
-	
+
+	followUnfollow = () => {
+		let senderId = JSON.parse(localStorage.getItem("user")).id;
+		let userId = this.props.match.params.id;
+		if (this.state.isfollowing) {
+			axios
+				.post(`http://localhost:5000/api/test/unfollow/${senderId}/${userId}`)
+				.then((res) => {
+					this.setState({
+						isfollowing: false,
+					});
+				});
+		} else {
+			axios
+				.post(`http://localhost:5000/api/test/follow/${senderId}/${userId}`)
+				.then((res) => {
+					this.setState({
+						isfollowing: true,
+					});
+				});
+		}
+	};
+
+	isFollowing = () => {
+		JSON.parse(localStorage.getItem("user")).following.forEach((elem) => {
+			if (elem.id === this.props.match.params.id) {
+				console.log(
+					JSON.parse(localStorage.getItem("user")).following,
+					this.props.match.params.id
+				);
+				this.setState({
+					isfollowing: true,
+				});
+			}
+		});
+	};
+
 	loadPage() {
 		const id = this.props.match.params;
 		console.log(id);
@@ -112,7 +91,14 @@ export class Userprofile extends Component {
 		})
 			.then((response) => response.json())
 			.then((user) => {
-				this.setState(() => ({ user }));
+				this.setState({
+					user: user,
+					follower: user.follower,
+					following: user.following,
+					firstname: user.firstname,
+					lastname: user.lastname,
+				});
+				this.isFollowing();
 			});
 		fetch(`http://localhost:5000/api/test/specificuserposts/${id.id}`, {
 			method: "GET",
@@ -124,16 +110,19 @@ export class Userprofile extends Component {
 	}
 
 	render() {
-		
 		const { posts } = this.state;
 		const { user } = this.state;
 
 		if (this.state.redirectToUser) {
+			window.location.reload();
 			return <Redirect to={`/userprofile/${this.state.redirectToUser}`} push />;
 		}
-		console.log(this.state.isfollowing);
+		console.log(
+			this.state.isfollowing,
+			this.props.match.params.id,
+			JSON.parse(localStorage.getItem("user")).id
+		);
 		return (
-			
 			<div>
 				<div className='fixed-top'>
 					<Header />
@@ -141,22 +130,35 @@ export class Userprofile extends Component {
 
 				<div class='container mrgn'>
 					<div class='row'>
-						
 						<div class='col-lg-8'>
 							<div className='card card-body' style={{ padding: "5%" }}>
 								<div className='card-body text-left'>
-									<button type="submit" onClick={()=> this.setState({isfollowing: !this.state.isfollowing})} class={this.state.isfollowing ? " btn btn-success float-right" : "btn btn-danger float-right"}>
-											{this.state.isfollowing ? 'Follow' : 'Unfollow'}
-										
-									</button>	
-									<h3>
-										{user.firstname} {user.lastname}
-									</h3>	
+									{this.props.match.params.id ===
+									JSON.parse(localStorage.getItem("user")).id ? (
+										<span></span>
+									) : (
+										<button
+											type='submit'
+											onClick={() => this.followUnfollow()}
+											class={
+												!this.state.isfollowing
+													? " btn btn-success float-right"
+													: "btn btn-danger float-right"
+											}>
+											{this.state.isfollowing ? "Unfollow" : "Follow"}
+										</button>
+									)}
+									<h3>{this.state.firstname + " " + this.state.lastname}</h3>
 									<hr />
-									
+									<img
+											className="float-right"
+											width="20%"
+											src={require("./no-img.png")}
+											alt="Profile"
+									/>
 									<p>{user.aboutme}</p>
-									<p>I ive in {user.city}</p>
-									go checkout me on{" "}
+									<p>I live in {user.city}</p>
+									Go checkout me on
 									<button type='button' class='btn btn-link'>
 										{user.website}
 									</button>
@@ -166,21 +168,27 @@ export class Userprofile extends Component {
 										<div class='input-group m-3'>
 											<div class='input-group-prepend'>
 												<label
-                          class='input-group-text bg-info text-white'
+													class='input-group-text bg-info text-white'
 													for='inputGroupSelect01'>
 													Following
 												</label>
 											</div>
-											<select
-												class='custom-select'
-												onChange={(event) => this.redirectToUserPage(event)}
-												id='inputGroupSelect01'>
-												{following.map((elem) => {
-													return (
-														<option value={elem.Userid}>{elem.username}</option>
-													);
-												})}
-											</select>
+											<>
+												{this.state.following.length > 0 ? (
+													<select
+														onChange={(event) => this.redirectToUserPage(event)}
+														class='custom-select'
+														id='inputGroupSelect01'>
+														{this.state.following.map((elem) => {
+															return (
+																<option value={elem.id}>{elem.fullname}</option>
+															);
+														})}
+													</select>
+												) : (
+													<p>Following none</p>
+												)}
+											</>
 										</div>
 										<div class='input-group m-3'>
 											<div class='input-group-prepend'>
@@ -190,27 +198,27 @@ export class Userprofile extends Component {
 													Followers
 												</label>
 											</div>
-											<select
-                        	onChange={(event) => this.redirectToUserPage(event)}
-												class='custom-select'
-												id='inputGroupSelect01'>
-												{follower.map((elem) => {
-													return (
-														<option value={elem.Userid}>{elem.username}</option>
-													);
-												})}
-											</select>
+											<>
+												{this.state.follower.length > 0 ? (
+													<select
+														onChange={(event) => this.redirectToUserPage(event)}
+														class='custom-select'
+														id='inputGroupSelect01'>
+														{this.state.follower.map((elem) => {
+															return (
+																<option value={elem.id}>{elem.fullname}</option>
+															);
+														})}
+													</select>
+												) : (
+													<p>No Followers</p>
+												)}
+											</>
 										</div>
 									</div>
 								</div>
-								
-
-
-
 							</div>
 							<h5 className='mt-3'> Posts by Author {user.firstname}</h5>
-
-							
 
 							{posts.map((post) => (
 								<div key={post._id} className=' col-md-12'>
@@ -245,7 +253,7 @@ export class Userprofile extends Component {
 												<span className='ml-5'>by - </span> {post.author}
 											</Link>
 											<Link to={`/userprofile/${post.user}`}>
-												<FontAwesomeIcon color="orange" icon={faComments} />
+												<FontAwesomeIcon color='orange' icon={faComments} />
 											</Link>
 										</div>
 									</div>

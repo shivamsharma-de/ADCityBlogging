@@ -16,7 +16,8 @@ authenticate = (req, res, next) => {
 };
 ``
 isAdmin = (req, res, next) => {
-  User.findById(req.userId).exec((err, user) => {
+  userId = req.params.id
+  User.findById(userId).exec((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
