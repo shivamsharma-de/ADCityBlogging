@@ -47,6 +47,7 @@ exports.getPost = async (req, res) => {
                 id: record._fields[1],
               });
             });
+            //pagination 
             const page = parseInt(req.query.page) || 1;
             const pageSize = 5;
             const pager = paginate(data1.length, page, pageSize);
